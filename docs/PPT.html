@@ -6,160 +6,160 @@
 <title>SpringGuard · 答辩 PPT</title>
 <style>
   :root {
-    --bg: #0f1419;
-    --panel: #1a222c;
-    --text: #e8eef4;
-    --muted: #9aabbc;
-    --accent: #3d9a7a;
-    --warn: #d4a017;
-    --line: #2a3542;
+    --ink: #0e1116;
+    --muted: #5a6572;
+    --line: #d5dbe3;
+    --accent: #b91c1c;
+    --ok: #047857;
+    --bg: #eceef1;
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; height: 100%; background: #000; color: var(--text);
-    font-family: "PingFang SC", "Noto Sans SC", "Helvetica Neue", sans-serif; }
+  html, body { margin: 0; height: 100%; background: #111; color: var(--ink);
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; }
   .deck { height: 100%; overflow: hidden; }
   .slide {
-    display: none; height: 100%; padding: 4.5vh 6vw;
+    display: none; height: 100%; padding: 7vh 6.5vw;
     background:
-      radial-gradient(ellipse 80% 50% at 10% 0%, rgba(61,154,122,.18), transparent 55%),
-      linear-gradient(160deg, #0f1419 0%, #152028 50%, #0c1015 100%);
+      linear-gradient(90deg, transparent 79px, rgba(213,219,227,.35) 80px) 0 0 / 80px 80px,
+      linear-gradient(180deg, #f7f8fa, var(--bg));
   }
   .slide.active { display: flex; flex-direction: column; justify-content: center; }
-  .brand { font-size: .95rem; letter-spacing: .12em; color: var(--accent); text-transform: uppercase; margin-bottom: 1rem; }
-  h1 { font-size: clamp(2rem, 4.2vw, 3.2rem); margin: 0 0 .8rem; font-weight: 700; line-height: 1.2; }
-  h2 { font-size: clamp(1.6rem, 3vw, 2.3rem); margin: 0 0 1.2rem; }
-  p, li { font-size: clamp(1.05rem, 1.6vw, 1.35rem); color: var(--muted); line-height: 1.55; }
+  .slide.cover {
+    background:
+      radial-gradient(900px 420px at 0% 0%, rgba(185,28,28,.12), transparent 55%),
+      linear-gradient(180deg, #fafbfc, var(--bg));
+  }
+  .brand { font-family: ui-monospace, Menlo, monospace; font-size: .9rem; letter-spacing: .14em; color: var(--accent); margin-bottom: 1rem; text-transform: uppercase; }
+  h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); margin: 0 0 .8rem; letter-spacing: -.03em; }
+  h1 em { font-style: normal; color: var(--accent); }
+  h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); margin: 0 0 1.1rem; }
+  .tagline { color: var(--muted); font-size: clamp(1.05rem, 2vw, 1.35rem); max-width: 42rem; line-height: 1.5; margin: 0; }
+  p, li { font-size: clamp(1.05rem, 1.7vw, 1.25rem); color: #3d4654; line-height: 1.55; }
   ul { margin: 0; padding-left: 1.2rem; }
-  li { margin: .45rem 0; }
-  .tagline { color: var(--text); font-size: clamp(1.15rem, 2vw, 1.5rem); max-width: 42rem; }
-  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-  .card {
-    background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
-    padding: 1.2rem 1.4rem;
-  }
-  .card h3 { margin: 0 0 .6rem; color: var(--text); font-size: 1.15rem; }
-  .card strong { color: var(--accent); }
-  table { width: 100%; border-collapse: collapse; font-size: 1.05rem; }
-  th, td { border-bottom: 1px solid var(--line); padding: .65rem .5rem; text-align: left; }
-  th { color: var(--accent); font-weight: 600; }
-  .hl { color: var(--warn); font-weight: 700; }
-  .ok { color: var(--accent); font-weight: 700; }
-  .footer {
-    position: fixed; left: 0; right: 0; bottom: 0; padding: .6rem 6vw;
-    display: flex; justify-content: space-between; color: #6b7c8d; font-size: .85rem;
-    background: linear-gradient(transparent, rgba(0,0,0,.55));
-  }
-  .hint { position: fixed; right: 1.2rem; top: 1rem; color: #6b7c8d; font-size: .8rem; }
-  code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: #b8d4c8; }
-  pre {
-    background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
-    padding: 1rem 1.2rem; font-size: .95rem; overflow: auto; color: #c5d5e0;
-  }
+  li { margin: .4rem 0; }
+  table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid var(--line); font-size: 1.05rem; }
+  th, td { border-bottom: 1px solid var(--line); padding: .7rem .85rem; text-align: left; }
+  th { background: #f3f5f7; color: var(--muted); font-family: ui-monospace, Menlo, monospace; font-size: .85rem; }
+  .ok { color: var(--ok); font-weight: 700; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .card { background: #fff; border: 1px solid var(--line); padding: 1rem 1.1rem; }
+  .card h3 { margin: 0 0 .5rem; font-size: 1.1rem; }
+  .card p { margin: 0; color: var(--muted); }
+  pre { margin: 0; background: #0f1419; color: #d8dee6; padding: 1rem 1.2rem; font: .95rem/1.45 ui-monospace, Menlo, monospace; white-space: pre-wrap; }
+  code { font-family: ui-monospace, Menlo, monospace; color: var(--accent); }
+  .kpi { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; }
+  .kpi .box { background: #fff; border: 1px solid var(--line); padding: 1rem; }
+  .kpi .n { font: 700 2rem/1 ui-monospace, Menlo, monospace; color: var(--ok); }
+  .kpi .l { margin-top: .5rem; color: var(--muted); font-size: .95rem; }
+  .foot { margin-top: 1.4rem; font-family: ui-monospace, Menlo, monospace; font-size: .85rem; color: var(--muted); }
+  .hint { position: fixed; right: 1rem; top: .8rem; color: #888; font-size: .75rem; z-index: 2; }
+  .pager { position: fixed; left: 0; right: 0; bottom: 0; padding: .5rem 6.5vw; display: flex; justify-content: space-between; color: #888; font-size: .8rem; background: linear-gradient(transparent, rgba(255,255,255,.85)); }
 </style>
 </head>
 <body>
 <div class="hint">← → / 空格翻页 · F 全屏</div>
 <div class="deck" id="deck">
 
-<section class="slide active">
-  <div class="brand">AIC · AI+开源</div>
-  <h1>SpringGuard</h1>
+<section class="slide cover active">
+  <div class="brand">AIC · AI+开源 · 答辩材料</div>
+  <h1>Spring<em>Guard</em></h1>
   <p class="tagline">基于 Open Code Review 的 Spring 智能审查增强<br/>确定性规则 × 可选 AI × 可复现评测</p>
+  <p class="foot">参赛方向：AI 开发工具与开源协作</p>
 </section>
 
 <section class="slide">
-  <h2>问题：Spring 审查的痛点</h2>
+  <h2>问题与场景</h2>
   <ul>
-    <li>事务自调用失效、缺 <code>@Valid</code>、MyBatis <code>${}</code> 注入</li>
-    <li>纯 LLM：不稳定、难复核、成本高</li>
-    <li>纯静态工具：缺语义叙述与开源 Agent 生态</li>
+    <li>事务自调用失效、缺 <code>@Valid</code>、MyBatis <code>${}</code> 注入等高发</li>
+    <li>纯大模型：不稳定、难复核；纯人工：成本高</li>
+    <li>目标用户：Java / Spring 学生与中小团队</li>
   </ul>
-</section>
-
-<section class="slide">
-  <h2>目标</h2>
-  <ul>
-    <li>无模型也能稳定检出核心 Spring 缺陷</li>
-    <li>可挂接上游 OCR + 本地 Ollama</li>
-    <li>金标准评测，拒绝「模型自评」</li>
-    <li>开源边界清晰：自研 vs 上游可核对</li>
-  </ul>
-</section>
-
-<section class="slide">
-  <h2>开源选型</h2>
-  <div class="grid">
-    <div class="card">
-      <h3>上游</h3>
-      <p><strong>alibaba/open-code-review</strong><br/>确定性工程 × Agent<br/>自定义规则包 · JSON 输出</p>
-    </div>
-    <div class="card">
-      <h3>为什么选它</h3>
-      <p>可扩展、可本地模型、<br/>二次开发切口清晰、<br/>避免从零造审查引擎</p>
-    </div>
-  </div>
 </section>
 
 <section class="slide">
   <h2>方案架构</h2>
-<pre>Spring 工程
+  <pre>Spring 工程 / 上传 ZIP
   ├─ SpringGuard（自研静态规则）→ findings
   └─ OCR + rule.json（可选）   → findings
-         └─ merge → eval → web</pre>
+         └─ merge → eval → Web :5193</pre>
 </section>
 
 <section class="slide">
-  <h2>创新点（相对薄封装）</h2>
+  <h2>AI 与开源如何融合</h2>
+  <div class="grid">
+    <div class="card"><h3>上游</h3><p>alibaba/open-code-review<br/>Apache-2.0 · <strong>未改源码</strong></p></div>
+    <div class="card"><h3>自研增强</h3><p>规则引擎 · 规则包 · 评测<br/>正/负例 · Web 上传服务</p></div>
+  </div>
+  <p style="margin-top:1rem">不是薄封装：扩展走官方规则包与进程外编排。</p>
+</section>
+
+<section class="slide">
+  <h2>自主实现内容</h2>
   <ul>
-    <li><strong>SpringGuard</strong>：Controller / Service / Mapper 确定性规则</li>
-    <li><strong>规则包</strong>：<code>.opencodereview/rule.json</code> 领域提示</li>
-    <li><strong>混合流水线</strong>：编排 + 归一化合并</li>
-    <li><strong>金标准评测</strong>：6 类缺陷 Recall</li>
+    <li><code>spring_guard.py</code>：Controller / Service / Mapper 规则</li>
+    <li><code>app_server.py</code> + Web：样例扫描 / ZIP 上传 / 评测</li>
+    <li><code>eval/</code>：金标准 Recall + 干净样例 Precision</li>
+    <li><code>spring-buggy</code> / <code>spring-clean</code> 对照样例</li>
   </ul>
 </section>
 
 <section class="slide">
-  <h2>评测结果（可脚本复现）</h2>
+  <h2>可验证效果</h2>
+  <div class="kpi">
+    <div class="box"><div class="n">1.0</div><div class="l">召回率 Recall（6/6）</div></div>
+    <div class="box"><div class="n">1.0</div><div class="l">精确率 Precision（含 clean）</div></div>
+    <div class="box"><div class="n">0</div><div class="l">干净样例误报</div></div>
+  </div>
+  <p class="foot">复现：python3 eval/run_eval.py</p>
+</section>
+
+<section class="slide">
+  <h2>评测对照</h2>
   <table>
-    <tr><th>模式</th><th>TP</th><th>Recall</th></tr>
-    <tr><td>spring_guard</td><td>6/6</td><td class="ok">1.00</td></tr>
-    <tr><td>ocr_only（本轮长时未完成）</td><td>0</td><td>0.00</td></tr>
-    <tr><td>hybrid（本轮≈Guard）</td><td>6/6</td><td class="ok">1.00</td></tr>
-  </table>
-  <p style="margin-top:1rem">演示以 Guard 为主；OCR 连通性已验证（<code>ocr llm test</code>）。</p>
-</section>
-
-<section class="slide">
-  <h2>自研 vs 上游</h2>
-  <table>
-    <tr><th>模块</th><th>归属</th></tr>
-    <tr><td>Open Code Review CLI</td><td>上游 Apache-2.0</td></tr>
-    <tr><td>SpringGuard 引擎</td><td class="ok">自研</td></tr>
-    <tr><td>Spring 规则包 / 评测 / 样例 / 演示</td><td class="ok">自研</td></tr>
+    <tr><th>集合 / 模式</th><th>结果</th></tr>
+    <tr><td>spring-buggy + Guard</td><td class="ok">TP 6/6 · Recall 1.0</td></tr>
+    <tr><td>spring-clean</td><td class="ok">0 findings · 无误报</td></tr>
+    <tr><td>OCR（本轮长时未完成）</td><td>可选增强，演示以 Guard 为主</td></tr>
   </table>
 </section>
 
 <section class="slide">
-  <h2>一键演示</h2>
-<pre>./scripts/demo.sh
-# → http://127.0.0.1:5193/
-# Recall = 1.0（spring_guard）</pre>
-  <p>口播稿：<code>docs/DEMO_SCRIPT.md</code></p>
+  <h2>功能演示要点</h2>
+  <ul>
+    <li>一键：<code>./scripts/demo.sh</code> → http://127.0.0.1:5193/</li>
+    <li>上传 Spring/Java ZIP（≤50MB）或扫描官方样例</li>
+    <li>按「全部 / 严重 / 高 / 中」筛选；右侧看证据代码</li>
+    <li>「跑金标准评测」输出 Recall / Precision</li>
+  </ul>
 </section>
 
 <section class="slide">
-  <h2>总结</h2>
+  <h2>开放成果</h2>
+  <ul>
+    <li>公开仓库：https://github.com/NEX-coding/springguard</li>
+    <li>代码 · 规则包 · 评测 · 样例 · Web · 文档 · 视频</li>
+    <li>清单披露上游许可与自研边界</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>后续计划</h2>
+  <ul>
+    <li>补全 OCR 对比实验；扩大真实负例集</li>
+    <li>更多 Spring 规则（如 <code>@Async</code>）</li>
+    <li>CI 接入；视情况向上游贡献规则示例</li>
+  </ul>
+</section>
+
+<section class="slide cover">
+  <div class="brand">谢谢</div>
+  <h1>Spring<em>Guard</em></h1>
   <p class="tagline">把开源 AI 审查底座，变成可复现的 Spring 工程安全网。</p>
-  <ul style="margin-top:1.2rem">
-    <li>后续：负例集 / Precision、CI 接入、更多 Spring 规则</li>
-  </ul>
+  <p class="foot">https://github.com/NEX-coding/springguard</p>
 </section>
 
 </div>
-<div class="footer">
-  <span>SpringGuard</span>
-  <span id="page">1 / 10</span>
-</div>
+<div class="pager"><span>SpringGuard</span><span id="page">1</span></div>
 <script>
   const slides = [...document.querySelectorAll('.slide')];
   let i = 0;
@@ -174,6 +174,7 @@
     if (['ArrowLeft','PageUp'].includes(e.key)) { e.preventDefault(); show(i - 1); }
     if (e.key === 'f' || e.key === 'F') document.documentElement.requestFullscreen?.();
   });
+  show(0);
 </script>
 </body>
 </html>
