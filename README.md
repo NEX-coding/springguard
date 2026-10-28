@@ -72,15 +72,11 @@ python3 eval/run_eval.py
 
 页面可直接：**扫描官方样例**、**上传 Spring/Java 工程 ZIP**、**跑金标准评测**。无需先手跑流水线。
 
-演示口播稿：`docs/DEMO_SCRIPT.md`  
-视频分镜：`docs/VIDEO_SHOTLIST.md`  
-演示视频（含口播）：`docs/DEMO_VIDEO.mp4`  
+演示视频：`docs/DEMO_VIDEO.mp4`  
 技术报告：`docs/TECH_REPORT.md` / `docs/TECH_REPORT.pdf`  
-答辩 PPT：`docs/PPT.html`（浏览器翻页）/ `docs/PPT.pdf`  
-资源清单 PDF：`docs/开源及第三方资源使用清单.pdf`  
-报名粘贴文案：`docs/FORM_COPY.md`  
-提交核对：`docs/SUBMIT_CHECKLIST.md`  
-提交包：上级目录 `SpringGuard_提交包.zip`
+答辩 PPT：`docs/PPT.html` / `docs/PPT.pdf`  
+资源清单：`docs/开源及第三方资源使用清单.md` / `.pdf`  
+报名粘贴文案：`docs/FORM_COPY.md`
 
 > 说明：本地小模型完整 OCR scan 较慢；比赛演示以 **SpringGuard（Recall=1.0，干净样例 0 误报）** 为主。负例工程：`samples/spring-clean`。
 
