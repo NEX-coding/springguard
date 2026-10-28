@@ -1,5 +1,6 @@
 {
   "project": "samples/spring-buggy",
+  "clean_project": "samples/spring-clean",
   "bugs": [
     {
       "id": "missing-valid",

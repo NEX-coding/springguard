@@ -4,174 +4,779 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>SpringGuard · Spring 审查增强</title>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --ink: #0f172a; --muted: #64748b; --line: #dbe3ee; --bg: #eef3f8;
-      --card: #fff; --accent: #b42318; --ok: #067647; --warn: #b54708;
-      --shadow: 0 12px 36px rgba(15,23,42,.08);
+      --bg: #eceef1;
+      --surface: #ffffff;
+      --ink: #0e1116;
+      --muted: #5a6572;
+      --line: #d5dbe3;
+      --accent: #b91c1c;
+      --accent-soft: #fce8e8;
+      --ok: #047857;
+      --crit: #b91c1c;
+      --high: #c2410c;
+      --med: #a16207;
+      --code: #0f1419;
+      --code-fg: #d8dee6;
+      --focus: #0e1116;
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 24px;
+      --radius: 2px;
+      --font: "IBM Plex Sans", system-ui, sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, monospace;
     }
+
     * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
     body {
-      margin: 0; font-family: "IBM Plex Sans", system-ui, sans-serif; color: var(--ink);
-      background: radial-gradient(800px 400px at 10% -10%, rgba(180,35,24,.12), transparent 50%),
-                  linear-gradient(180deg, #f8fafc, var(--bg));
-      min-height: 100vh;
+      font-family: var(--font);
+      color: var(--ink);
+      background:
+        linear-gradient(90deg, transparent 79px, rgba(213,219,227,.55) 80px) 0 0 / 80px 80px,
+        linear-gradient(var(--bg), #e7eaee);
+      background-attachment: fixed;
     }
-    .wrap { max-width: 1080px; margin: 0 auto; padding: 28px 20px 48px; }
-    .brand { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
-    h1 { margin: 6px 0 8px; font-size: 28px; letter-spacing: -.03em; }
-    .lead { color: var(--muted); margin: 0 0 22px; max-width: 40rem; line-height: 1.55; }
-    .grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 14px; }
-    .card {
-      background: var(--card); border: 1px solid var(--line); border-radius: 16px;
-      box-shadow: var(--shadow); padding: 16px;
+
+    .app {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: var(--space-4) var(--space-4) 48px;
     }
-    h2 { margin: 0 0 10px; font-size: 16px; }
-    .sub { color: var(--muted); font-size: 12px; margin: 0 0 12px; }
-    .row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+
+    /* ——— Top bar ——— */
+    .top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: var(--space-3);
+      margin-bottom: var(--space-4);
+      padding-bottom: var(--space-3);
+      border-bottom: 1px solid var(--line);
+    }
+    .brand-block { min-width: 0; }
+    .brand {
+      margin: 0;
+      font-family: var(--mono);
+      font-size: clamp(1.75rem, 3.2vw, 2.15rem);
+      font-weight: 700;
+      letter-spacing: -.04em;
+      line-height: 1;
+    }
+    .brand em {
+      font-style: normal;
+      color: var(--accent);
+    }
+    .tagline {
+      margin: 8px 0 0;
+      max-width: 36rem;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+    .live {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      padding: 6px 10px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .live i {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--ok);
+      box-shadow: 0 0 0 3px rgba(4,120,87,.18);
+    }
+    .live[data-state="busy"] i {
+      background: var(--high);
+      animation: blink 1s step-end infinite;
+    }
+    .live[data-state="err"] i { background: var(--crit); box-shadow: none; }
+
+    /* ——— Action strip ——— */
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      align-items: center;
+      margin-bottom: var(--space-3);
+      padding: 10px 12px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      transition: border-color .15s, background .15s, box-shadow .15s;
+    }
+    .actions.drag {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      box-shadow: inset 0 0 0 1px var(--accent);
+    }
+    .actions .hint {
+      margin-left: auto;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+    }
+    input[type=file] {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+    @media (max-width: 720px) {
+      .actions .hint { width: 100%; margin-left: 0; order: 3; }
+    }
     button {
-      border: 1px solid var(--line); background: #fff; border-radius: 10px;
-      padding: 9px 12px; font: 600 13px "IBM Plex Sans", system-ui; cursor: pointer;
+      font: 600 13px var(--font);
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--ink);
+      padding: 10px 14px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      min-height: 40px;
     }
-    .primary { background: var(--accent); color: #fff; border-color: var(--accent); }
-    .chip {
-      display: inline-block; font: 500 11px/1 "IBM Plex Mono", monospace;
-      padding: 4px 8px; border-radius: 999px; background: #f1f5f9; border: 1px solid var(--line);
-      margin: 0 6px 6px 0;
+    button:hover { border-color: #9aa6b5; }
+    button:focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
     }
-    .list { max-height: 420px; overflow: auto; border: 1px solid var(--line); border-radius: 12px; }
-    .item { padding: 12px; border-bottom: 1px solid var(--line); }
-    .item:last-child { border-bottom: 0; }
-    .sev { font-size: 11px; font-weight: 700; text-transform: uppercase; }
+    button.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    button.primary:hover { filter: brightness(1.05); }
+    button.ghost {
+      background: transparent;
+      border-color: transparent;
+      color: var(--muted);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      font-weight: 500;
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+    button.ghost:hover { color: var(--accent); }
+    button:disabled { opacity: .55; cursor: wait; }
+
+    /* ——— KPI ——— */
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      margin-bottom: var(--space-3);
+    }
+    .kpi {
+      appearance: none;
+      display: block;
+      width: 100%;
+      text-align: left;
+      background: var(--surface);
+      padding: 12px 14px;
+      min-height: 72px;
+      border: 0;
+      border-radius: 0;
+      cursor: pointer;
+      font: inherit;
+      color: inherit;
+      position: relative;
+    }
+    .kpi:hover { background: #f7f8fa; }
+    .kpi:focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: -2px;
+      z-index: 1;
+    }
+    .kpi.active {
+      background: var(--accent-soft);
+      box-shadow: inset 0 -2px 0 var(--accent);
+    }
+    .kpi.static {
+      cursor: default;
+    }
+    .kpi.static:hover { background: var(--surface); }
+    .kpi .label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .kpi .value {
+      font-family: var(--mono);
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: -.03em;
+      line-height: 1;
+    }
+    .kpi.crit .value { color: var(--crit); }
+    .kpi.high .value { color: var(--high); }
+    .kpi.med .value { color: var(--med); }
+    .kpi.ok .value { color: var(--ok); }
+
+    /* ——— Main layout ——— */
+    .main {
+      display: grid;
+      grid-template-columns: minmax(0, 1.65fr) minmax(260px, .7fr);
+      gap: var(--space-3);
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+    }
+    .panel-h {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: var(--space-2);
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+    }
+    .panel-h h2 {
+      margin: 0;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+      font-family: var(--mono);
+    }
+    .panel-h .meta {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .list {
+      max-height: min(62vh, 640px);
+      overflow: auto;
+    }
+    .finding {
+      display: grid;
+      grid-template-columns: 3px 72px 1fr;
+      gap: 0 12px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      cursor: pointer;
+      transition: background .12s;
+      animation: rise .28s ease both;
+    }
+    .finding:hover, .finding:focus-visible, .finding.active {
+      background: #f7f8fa;
+      outline: none;
+    }
+    .finding.active { background: var(--accent-soft); }
+    .bar { background: var(--muted); }
+    .bar.critical { background: var(--crit); }
+    .bar.high { background: var(--high); }
+    .bar.medium { background: var(--med); }
+    .sev {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      padding-top: 2px;
+    }
     .sev.critical, .sev.high { color: var(--accent); }
-    .sev.medium { color: var(--warn); }
-    .meta { font: 12px/1.45 "IBM Plex Mono", monospace; color: var(--muted); margin-top: 4px; }
-    .msg { margin-top: 6px; font-size: 14px; }
-    .status { margin-top: 10px; font-size: 12px; color: var(--muted); }
-    .status.err { color: var(--accent); }
-    .status.ok { color: var(--ok); }
-    pre {
-      margin: 0; background: #0f172a; color: #e2e8f0; border-radius: 12px;
-      padding: 12px; font: 12px/1.5 "IBM Plex Mono", monospace; overflow: auto; max-height: 280px;
+    .sev.medium { color: var(--med); }
+    .finding .body { min-width: 0; }
+    .rule {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
+      margin: 0 0 4px;
+      word-break: break-all;
     }
-    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+    .msg {
+      margin: 0 0 6px;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    .path {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      word-break: break-all;
+    }
+
+    .empty, .skel-wrap {
+      padding: 36px 16px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .skel {
+      height: 54px;
+      margin: 8px 14px;
+      background: linear-gradient(90deg, #f0f2f5, #e6e9ee, #f0f2f5);
+      background-size: 200% 100%;
+      animation: shimmer 1.1s linear infinite;
+      border: 1px solid var(--line);
+    }
+
+    .side .block { padding: 14px; border-bottom: 1px solid var(--line); }
+    .side .block:last-child { border-bottom: 0; }
+    .side .k {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 0 0 8px;
+    }
+    .side .detail-rule {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 600;
+      margin: 0 0 8px;
+      word-break: break-all;
+    }
+    .side .detail-msg {
+      margin: 0 0 10px;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+    .code {
+      margin: 0;
+      padding: 10px;
+      background: var(--code);
+      color: var(--code-fg);
+      font: 12px/1.45 var(--mono);
+      overflow: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .stat {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 14px;
+    }
+    .stat:last-child { border-bottom: 0; }
+    .stat strong {
+      font-family: var(--mono);
+      font-weight: 600;
+    }
+    .stat strong.ok { color: var(--ok); }
+    details summary {
+      cursor: pointer;
+      font-size: 12px;
+      color: var(--muted);
+      font-family: var(--mono);
+      list-style: none;
+    }
+    details summary::-webkit-details-marker { display: none; }
+    details summary::before { content: "▸ "; }
+    details[open] summary::before { content: "▾ "; }
+    details summary:hover, details summary:focus-visible { color: var(--ink); }
+    details pre {
+      margin: 10px 0 0;
+      padding: 10px;
+      background: var(--code);
+      color: var(--code-fg);
+      font: 11px/1.45 var(--mono);
+      max-height: 200px;
+      overflow: auto;
+    }
+
+    .status {
+      margin-top: var(--space-3);
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      min-height: 1.2em;
+    }
+    .status.ok { color: var(--ok); }
+    .status.err { color: var(--crit); }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: none; }
+    }
+    @keyframes blink {
+      50% { opacity: .25; }
+    }
+    @keyframes shimmer {
+      to { background-position: -200% 0; }
+    }
+
+    @media (max-width: 900px) {
+      .actions { grid-template-columns: 1fr; }
+      .kpis { grid-template-columns: repeat(2, 1fr); }
+      .main { grid-template-columns: 1fr; }
+      .finding { grid-template-columns: 3px 56px 1fr; }
+    }
+    @media (max-width: 420px) {
+      .app { padding: 12px 12px 40px; }
+      .btn-row { width: 100%; }
+      .btn-row button.primary { flex: 1; }
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="brand">SpringGuard</div>
-    <h1>Spring 智能审查增强</h1>
-    <p class="lead">自研确定性规则 + 阿里开源 Open Code Review。先加载 <code>out/merged.json</code> 或仅 Guard 结果进行演示。</p>
+  <div class="app">
+    <header class="top">
+      <div class="brand-block">
+        <h1 class="brand">Spring<em>Guard</em></h1>
+        <p class="tagline">上传 Spring / Java 工程，检出事务失效、缺校验、MyBatis 注入等高发问题。</p>
+      </div>
+      <div class="live" id="live" data-state="idle" aria-live="polite">
+        <i aria-hidden="true"></i>
+        <span id="live-text">READY</span>
+      </div>
+    </header>
 
-    <div class="grid">
-      <section class="card">
-        <h2>缺陷列表</h2>
-        <p class="sub">运行 <code>python3 scripts/run_pipeline.py --skip-ocr</code> 后刷新</p>
-        <div class="row">
-          <button class="primary" id="btn-load" type="button">加载 out/merged.json</button>
-          <button id="btn-guard" type="button">加载 spring_guard.json</button>
+    <section class="actions" id="actions" aria-label="扫描操作">
+      <input id="file" type="file" accept=".zip,application/zip" aria-label="上传工程 ZIP"/>
+      <button type="button" class="primary" id="btn-upload">上传工程 ZIP</button>
+      <button type="button" id="btn-sample">扫描官方样例</button>
+      <button type="button" class="ghost" id="btn-eval">跑金标准评测</button>
+      <span class="hint" id="drop-hint">也可把 ZIP 拖到此栏 · ≤50MB</span>
+    </section>
+
+    <section class="kpis" id="kpis" aria-label="按严重级别筛选" hidden>
+      <button type="button" class="kpi active" data-filter="all" aria-pressed="true">
+        <div class="label">全部</div><div class="value" id="n-total">0</div>
+      </button>
+      <button type="button" class="kpi crit" data-filter="critical" aria-pressed="false">
+        <div class="label">严重</div><div class="value" id="n-crit">0</div>
+      </button>
+      <button type="button" class="kpi high" data-filter="high" aria-pressed="false">
+        <div class="label">高</div><div class="value" id="n-high">0</div>
+      </button>
+      <button type="button" class="kpi med" data-filter="medium" aria-pressed="false">
+        <div class="label">中</div><div class="value" id="n-med">0</div>
+      </button>
+    </section>
+
+    <div class="main">
+      <section class="panel" aria-labelledby="findings-title">
+        <div class="panel-h">
+          <h2 id="findings-title">缺陷列表</h2>
+          <div class="meta" id="list-meta">等待扫描</div>
         </div>
-        <div id="summary"></div>
-        <div class="list" id="list"></div>
-        <div class="status" id="status">尚未加载结果</div>
-      </section>
-      <section class="card">
-        <h2>评测摘要</h2>
-        <p class="sub">来自 <code>eval/results.json</code></p>
-        <pre id="eval">点击下方加载</pre>
-        <div class="row" style="margin-top:12px">
-          <button id="btn-eval" type="button">加载评测结果</button>
+        <div class="list" id="list" role="list">
+          <div class="empty" role="status">选择 ZIP 或扫描官方样例开始</div>
         </div>
       </section>
+
+      <aside class="panel side" aria-label="详情">
+        <div class="block" id="detail">
+          <p class="k">选中缺陷</p>
+          <p class="empty" style="padding:12px 0;text-align:left" id="detail-empty">点击左侧条目查看证据</p>
+          <div id="detail-body" hidden>
+            <p class="detail-rule" id="d-rule"></p>
+            <p class="detail-msg" id="d-msg"></p>
+            <p class="path" id="d-path" style="margin-bottom:10px"></p>
+            <pre class="code" id="d-code"></pre>
+          </div>
+        </div>
+        <div class="block">
+          <p class="k">本次摘要</p>
+          <div class="stat"><span>发现问题</span><strong id="s-count">—</strong></div>
+          <div class="stat"><span>扫描文件</span><strong id="s-files">—</strong></div>
+          <div class="stat"><span>召回率 Recall</span><strong id="s-recall" class="ok">—</strong></div>
+          <div class="stat"><span>精确率 Precision</span><strong id="s-precision" class="ok">—</strong></div>
+        </div>
+        <pre id="eval" hidden></pre>
+      </aside>
     </div>
+
+    <p class="status" id="status" role="status">就绪</p>
   </div>
+
 <script>
-async function loadJson(url) {
-  const r = await fetch(url + "?t=" + Date.now());
-  if (!r.ok) throw new Error(url + " 不存在，请先跑流水线生成 out/");
-  return r.json();
+const $ = (id) => document.getElementById(id);
+let currentFindings = [];
+let selectedId = null;
+let severityFilter = "all";
+let lastFilesScanned = null;
+
+function setLive(state, text) {
+  const live = $("live");
+  live.dataset.state = state;
+  $("live-text").textContent = text;
+}
+
+function setBusy(on) {
+  $("btn-sample").disabled = on;
+  $("btn-eval").disabled = on;
+  $("btn-upload").disabled = on;
+  if (on) setLive("busy", "SCANNING");
+}
+
+function showSkeleton() {
+  $("list").innerHTML = `<div class="skel-wrap" aria-busy="true" aria-label="加载中">
+    <div class="skel"></div><div class="skel"></div><div class="skel"></div>
+  </div>`;
+}
+
+function compactDrop(on) {
+  $("drop-hint").textContent = on
+    ? "可继续拖入其他 ZIP · ≤50MB"
+    : "也可把 ZIP 拖到此栏 · ≤50MB";
+}
+
+function filteredFindings() {
+  if (severityFilter === "all") return currentFindings;
+  return currentFindings.filter(f => (f.severity || "").toLowerCase() === severityFilter);
+}
+
+function setSeverityFilter(next) {
+  severityFilter = next;
+  document.querySelectorAll(".kpi[data-filter]").forEach(btn => {
+    const on = btn.dataset.filter === next;
+    btn.classList.toggle("active", on);
+    btn.setAttribute("aria-pressed", on ? "true" : "false");
+  });
+  paintList();
+}
+
+function selectFinding(id) {
+  selectedId = id;
+  document.querySelectorAll(".finding").forEach(el => {
+    el.classList.toggle("active", el.dataset.id === id);
+  });
+  const pool = filteredFindings();
+  const f = pool.find(x => x.id === id) || pool[0];
+  if (!f) {
+    $("detail-empty").hidden = false;
+    $("detail-body").hidden = true;
+    $("detail-empty").textContent = pool.length
+      ? "点击左侧条目查看证据"
+      : "当前筛选下没有缺陷";
+    return;
+  }
+  $("detail-empty").hidden = true;
+  $("detail-body").hidden = false;
+  $("d-rule").textContent = f.rule || f.source || "";
+  $("d-msg").textContent = f.message || "";
+  $("d-path").textContent = `${f.file || ""}:${f.line || 0}`;
+  $("d-code").textContent = (f.evidence || "").trim() || "(无代码证据)";
+}
+
+function paintList() {
+  const shown = filteredFindings();
+  const files = lastFilesScanned != null ? lastFilesScanned : "—";
+  const sevName = { critical: "严重", high: "高", medium: "中", all: "全部" };
+  if (severityFilter === "all") {
+    $("list-meta").textContent = `${currentFindings.length} 条 · ${files} 个文件`;
+  } else {
+    $("list-meta").textContent = `仅看「${sevName[severityFilter] || severityFilter}」· ${shown.length}/${currentFindings.length}`;
+  }
+
+  if (!currentFindings.length) {
+    $("list").innerHTML = `<div class="empty" role="status">未发现匹配规则的问题。可换一份含 Controller/Service/Mapper 的工程再试。</div>`;
+    selectFinding(null);
+    return;
+  }
+  if (!shown.length) {
+    const name = { critical: "严重", high: "高", medium: "中" }[severityFilter] || severityFilter;
+    $("list").innerHTML = `<div class="empty" role="status">没有「${name}」级别的问题。<button type="button" class="ghost" id="clear-filter">查看全部</button></div>`;
+    $("clear-filter")?.addEventListener("click", () => setSeverityFilter("all"));
+    selectFinding(null);
+    return;
+  }
+
+  const sevLabel = { critical: "严重", high: "高", medium: "中", info: "信息" };
+  $("list").innerHTML = shown.map((f, i) => {
+    const sev = (f.severity || "info").toLowerCase();
+    return `
+      <article class="finding" role="listitem" tabindex="0" data-id="${f.id}" style="animation-delay:${Math.min(i,8)*0.03}s">
+        <div class="bar ${sev}" aria-hidden="true"></div>
+        <div class="sev ${sev}">${sevLabel[sev] || sev}</div>
+        <div class="body">
+          <p class="rule">${f.rule || ""}</p>
+          <p class="msg">${f.message || ""}</p>
+          <div class="path">${f.file || ""}:${f.line || 0}</div>
+        </div>
+      </article>`;
+  }).join("");
+
+  $("list").querySelectorAll(".finding").forEach(el => {
+    const activate = () => selectFinding(el.dataset.id);
+    el.addEventListener("click", activate);
+    el.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); activate(); }
+    });
+  });
+  const keep = shown.find(f => f.id === selectedId);
+  selectFinding(keep ? keep.id : shown[0].id);
 }
 
 function renderFindings(data) {
-  const findings = data.findings || data || [];
-  const list = document.getElementById("list");
-  const summary = document.getElementById("summary");
-  const by = {};
-  findings.forEach(f => { by[f.severity || "info"] = (by[f.severity || "info"] || 0) + 1; });
-  summary.innerHTML = Object.entries(by).map(([k,v]) => `<span class="chip">${k}: ${v}</span>`).join("")
-    + `<span class="chip">total: ${findings.length}</span>`;
-  list.innerHTML = findings.map(f => `
-    <div class="item">
-      <div><span class="sev ${f.severity || ""}">${f.severity || "-"}</span>
-        · <strong>${f.rule || f.source || ""}</strong></div>
-      <div class="msg">${f.message || ""}</div>
-      <div class="meta">${f.file || ""}:${f.line || 0} · ${f.source || ""}</div>
-      <div class="meta">${(f.evidence || "").slice(0,160)}</div>
-    </div>
-  `).join("") || `<div class="item">无发现</div>`;
+  const findings = data.findings || [];
+  const by = { critical: 0, high: 0, medium: 0 };
+  findings.forEach(f => {
+    const k = (f.severity || "").toLowerCase();
+    if (k in by) by[k] += 1;
+  });
+
+  $("kpis").hidden = false;
+  $("n-crit").textContent = by.critical;
+  $("n-high").textContent = by.high;
+  $("n-med").textContent = by.medium;
+  $("n-total").textContent = findings.length;
+  $("s-count").textContent = String(data.summary?.count ?? findings.length);
+  lastFilesScanned = data.files_scanned != null ? data.files_scanned : null;
+  $("s-files").textContent = lastFilesScanned != null ? String(lastFilesScanned) : "—";
+  compactDrop(true);
+
+  currentFindings = findings.map((f, i) => ({ ...f, id: f.id || `f-${i}` }));
+  severityFilter = "all";
+  document.querySelectorAll(".kpi[data-filter]").forEach(btn => {
+    const on = btn.dataset.filter === "all";
+    btn.classList.toggle("active", on);
+    btn.setAttribute("aria-pressed", on ? "true" : "false");
+  });
+  paintList();
 }
 
-document.getElementById("btn-load").onclick = async () => {
-  const st = document.getElementById("status");
+function setRaw(obj) {
+  $("eval").textContent = typeof obj === "string" ? obj : JSON.stringify(obj, null, 2);
+}
+
+function setRecall(v) {
+  const t = v == null || v === "" ? "—" : String(v);
+  $("s-recall").textContent = t;
+}
+
+function setPrecision(v) {
+  const t = v == null || v === "" ? "—" : String(v);
+  const el = $("s-precision");
+  if (el) el.textContent = t;
+}
+
+async function scanSample() {
+  setBusy(true);
+  $("status").className = "status";
+  $("status").textContent = "正在扫描官方样例…";
+  showSkeleton();
   try {
-    const d = await loadJson("../out/merged.json");
+    const r = await fetch("/api/scan/sample", { method: "POST" });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error || "扫描失败");
     renderFindings(d);
-    st.className = "status ok";
-    st.textContent = `已加载 merged · Guard ${d.spring_guard?.count ?? "-"} · OCR ${d.ocr?.findings ?? 0}`;
+    setRaw(d.summary || d);
+    setLive("idle", "READY");
+    $("status").className = "status ok";
+    $("status").textContent = `样例扫描完成 · ${d.summary?.count ?? 0} 条`;
   } catch (e) {
-    st.className = "status err";
-    st.textContent = String(e.message || e);
+    setLive("err", "ERROR");
+    $("status").className = "status err";
+    $("status").textContent = String(e.message || e);
+    $("list").innerHTML = `<div class="empty" role="alert">${String(e.message || e)}</div>`;
+  } finally {
+    setBusy(false);
   }
+}
+
+async function scanUpload(file) {
+  setBusy(true);
+  $("status").className = "status";
+  $("status").textContent = `正在扫描 ${file.name}…`;
+  showSkeleton();
+  try {
+    const fd = new FormData();
+    fd.append("file", file);
+    const r = await fetch("/api/scan/upload", { method: "POST", body: fd });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error || "上传扫描失败");
+    renderFindings(d);
+    setRaw({ summary: d.summary, upload: d.upload, project: d.project });
+    setRecall(null);
+    setLive("idle", "READY");
+    $("status").className = "status ok";
+    $("status").textContent = `上传扫描完成 · ${d.upload?.project_name || ""} · ${d.summary?.count ?? 0} 条`;
+  } catch (e) {
+    setLive("err", "ERROR");
+    $("status").className = "status err";
+    $("status").textContent = String(e.message || e);
+    $("list").innerHTML = `<div class="empty" role="alert">${String(e.message || e)}</div>`;
+  } finally {
+    setBusy(false);
+    $("file").value = "";
+  }
+}
+
+async function runEval() {
+  setBusy(true);
+  $("status").className = "status";
+  $("status").textContent = "正在跑金标准评测…";
+  try {
+    const r = await fetch("/api/eval");
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error || "评测失败");
+    const sg = d.modes?.spring_guard;
+    setRecall(sg ? sg.recall : null);
+    setPrecision(sg?.precision_with_clean ?? sg?.precision ?? d.clean?.precision);
+    setRaw(d);
+    $("kpis").hidden = false;
+    setLive("idle", "READY");
+    $("status").className = "status ok";
+    const cleanFp = d.clean?.false_positives;
+    $("status").textContent = sg
+      ? `评测完成 · Recall=${sg.recall} · Precision=${sg.precision_with_clean ?? sg.precision} · 干净样例误报=${cleanFp ?? "—"}`
+      : "评测完成";
+    const s = await fetch("/api/scan/sample", { method: "POST" });
+    const sd = await s.json();
+    if (s.ok) renderFindings(sd);
+  } catch (e) {
+    setLive("err", "ERROR");
+    $("status").className = "status err";
+    $("status").textContent = String(e.message || e);
+  } finally {
+    setBusy(false);
+  }
+}
+
+const actions = $("actions");
+["dragenter", "dragover"].forEach(ev => {
+  actions.addEventListener(ev, e => { e.preventDefault(); actions.classList.add("drag"); });
+});
+["dragleave", "drop"].forEach(ev => {
+  actions.addEventListener(ev, e => { e.preventDefault(); actions.classList.remove("drag"); });
+});
+actions.addEventListener("drop", e => {
+  const f = e.dataTransfer?.files?.[0];
+  if (f) scanUpload(f);
+});
+
+$("btn-upload").onclick = () => $("file").click();
+$("btn-sample").onclick = scanSample;
+$("btn-eval").onclick = runEval;
+$("file").onchange = e => {
+  const f = e.target.files?.[0];
+  if (f) scanUpload(f);
 };
 
-document.getElementById("btn-guard").onclick = async () => {
-  const st = document.getElementById("status");
-  try {
-    const d = await loadJson("../out/spring_guard.json");
-    renderFindings(d);
-    st.className = "status ok";
-    st.textContent = `已加载 Guard · ${d.summary?.count ?? d.findings?.length ?? 0} 条`;
-  } catch (e) {
-    st.className = "status err";
-    st.textContent = String(e.message || e);
-  }
-};
+document.querySelectorAll(".kpi[data-filter]").forEach(btn => {
+  btn.addEventListener("click", () => setSeverityFilter(btn.dataset.filter));
+});
 
-document.getElementById("btn-eval").onclick = async () => {
-  const el = document.getElementById("eval");
-  try {
-    const d = await loadJson("../eval/results.json");
-    el.textContent = JSON.stringify(d, null, 2);
-  } catch (e) {
-    el.textContent = String(e.message || e);
-  }
-};
-
-// 进入页面自动尝试加载，减少演示点击
-(async () => {
-  try {
-    const d = await loadJson("../out/merged.json");
-    renderFindings(d);
-    document.getElementById("status").className = "status ok";
-    document.getElementById("status").textContent =
-      `已自动加载 merged · Guard ${d.spring_guard?.count ?? "-"} · OCR ${d.ocr?.findings ?? 0}`;
-  } catch (_) {
-    try {
-      const d = await loadJson("../out/spring_guard.json");
-      renderFindings(d);
-      document.getElementById("status").className = "status ok";
-      document.getElementById("status").textContent = "已自动加载 spring_guard.json";
-    } catch (e2) {
-      document.getElementById("status").className = "status err";
-      document.getElementById("status").textContent = "请先运行 scripts/demo.sh 或 run_pipeline.py";
-    }
-  }
-  try {
-    const d = await loadJson("../eval/results.json");
-    document.getElementById("eval").textContent = JSON.stringify(d, null, 2);
-  } catch (_) {}
-})();
+scanSample();
 </script>
 </body>
 </html>

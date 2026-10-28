@@ -1,32 +1,35 @@
 # SpringGuard 评测纪要
 
-> 复现：`python3 eval/run_eval.py`（可先跑 `scripts/run_pipeline.py`）
+> 复现：`python3 eval/run_eval.py`
 
 ## 设置
 
-- 样例：`samples/spring-buggy`（人工植入 6 类 Spring 缺陷）  
-- 金标准：`eval/gold.json`  
-- 模式：
-  1. **spring_guard**：仅确定性引擎  
-  2. **ocr_only**：仅 Open Code Review（若未跑则为空）  
-  3. **hybrid**：两者合并  
+| 集合 | 路径 | 作用 |
+|------|------|------|
+| 正例（有缺陷） | `samples/spring-buggy` | 测 **Recall** |
+| 负例（干净） | `samples/spring-clean` | 测 **误报 / Precision** |
+| 金标准 | `eval/gold.json`（6 类缺陷） | 命中判定 |
+
+模式：`spring_guard` / `ocr_only` / `hybrid`
 
 ## 指标
 
-本轮以 **Recall（金标准缺陷命中率）** 为主；Precision 可在扩大负例集后补充。
+- **Recall** = 命中金标准缺陷数 / 6  
+- **Precision（buggy）** = 能对应到金标准的 findings / 全部 findings  
+- **Precision（clean）** = clean 上 0 findings 则为 1.0  
+- **precision_with_clean** = 综合 buggy 匹配 findings 与 clean 误报  
 
-最新 `eval/results.json`（Guard-only 流水线）：
+## 最新结果（`eval/results.json`）
 
-| 模式 | Findings | TP | Recall |
-|------|----------|----|--------|
-| spring_guard | 见 results | 6/6 | **1.00** |
-| ocr_only（未跑 LLM 时） | 0 | 0 | 0.00 |
-| hybrid | 同 Guard | 6/6 | **1.00** |
+| 模式 | Findings | TP | Recall | Precision |
+|------|----------|----|--------|-----------|
+| spring_guard | 7 | 6/6 | **1.00** | **1.00**（含 clean） |
+| ocr_only（未跑 LLM） | 0 | 0 | 0.00 | — |
+| hybrid | 7 | 6/6 | **1.00** | 1.00 |
+| spring-clean | **0** | — | — | **1.00**（无误报） |
 
-> 接入 OCR 后请重跑 `run_pipeline.py`（去掉 `--skip-ocr`）更新本表。
+## 结论
 
-## 结论模板
-
-1. Guard 对事务自调用、缺 `@Valid`、`${}` 等模式可稳定召回。  
-2. OCR 适合补充语义/跨文件问题，单独使用不够稳。  
-3. Hybrid 在样例上召回不低于 Guard，体现「开源 AI 审查 + 自研规则」融合价值。
+1. Guard 对六类 Spring 高发缺陷可稳定召回。  
+2. 在对照干净工程上当前规则 **0 误报**。  
+3. OCR 适合语义补充；本轮演示以 Guard 为主。  

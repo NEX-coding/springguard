@@ -37,3 +37,10 @@ Spring 应用中事务自调用、入参未校验、MyBatis 动态 SQL 注入等
 - `SpringGuard_开源资源清单.pdf` ← `docs/开源及第三方资源使用清单.pdf`
 - `SpringGuard_演示视频.mp4` ← `docs/DEMO_VIDEO.mp4`
 - `SpringGuard_答辩PPT.pdf` ← `docs/PPT.pdf`
+
+
+## 本地提交包路径
+
+```
+/Users/royalchirs/code/比赛/ai+开源/SpringGuard_提交包.zip
+```

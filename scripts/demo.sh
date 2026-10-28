@@ -1,15 +1,13 @@
 #!/usr/bin/env bash
-# 一键演示：Guard 扫描 → 评测 → 打开结果页
+# 一键启动：可供本机与局域网他人使用的 Web 服务
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
-echo "==> [1/3] SpringGuard 确定性扫描"
-python3 scripts/run_pipeline.py --project samples/spring-buggy --skip-ocr
-
-echo "==> [2/3] 评测金标准召回"
-python3 eval/run_eval.py
-
-echo "==> [3/3] 启动演示页 http://127.0.0.1:5193/"
-cd web
-exec python3 -m http.server 5193
+echo "==> 启动 SpringGuard Web（样例扫描 / ZIP 上传）"
+echo "    本机:   http://127.0.0.1:5193/"
+IP="$(ipconfig getifaddr en0 2>/dev/null || ipconfig getifaddr en1 2>/dev/null || true)"
+if [[ -n "${IP:-}" ]]; then
+  echo "    局域网: http://${IP}:5193/"
+fi
+exec python3 scripts/app_server.py 5193

@@ -1,19 +1,4 @@
 {
-  "project": "/Users/royalchirs/code/比赛/ai+开源/springguard/samples/spring-buggy",
-  "spring_guard": {
-    "count": 7,
-    "by_severity": {
-      "high": 2,
-      "medium": 2,
-      "critical": 3
-    }
-  },
-  "ocr": {
-    "ok": false,
-    "elapsed_sec": null,
-    "error": null,
-    "findings": 0
-  },
   "findings": [
     {
       "id": "src/main/java/com/demo/controller/UserController.java:23:missing-valid",
@@ -85,5 +70,11 @@
       "evidence": "return userMapper.findByKeyword(\"name LIKE '%\" + keyword + \"%'\");",
       "source": "spring-guard"
     }
-  ]
+  ],
+  "spring_guard": {
+    "count": 7
+  },
+  "ocr": {
+    "findings": 0
+  }
 }

@@ -86,19 +86,27 @@ def scan_file(path: Path, root: Path) -> list[Finding]:
                     line,
                 )
             if re.search(r'\b\w+\.toLowerCase\s*\(', code_line) or re.search(r'\b\w+\.trim\s*\(', code_line):
-                # 若近期有 Map.get 赋值到同名变量，标为风险
+                # 若近期有 Map.get 赋值到同名变量，且未见判空，标为风险
                 prev = "\n".join(lines[max(0, i - 6) : i])
                 m = re.search(r'\b(\w+)\s*=\s*\w+\.get\s*\(', prev)
                 use = re.search(r'\b(\w+)\.(toLowerCase|trim)\s*\(', code_line)
                 if m and use and m.group(1) == use.group(1):
-                    add(
-                        f"{rel}:{i}:npe-chain",
-                        "medium",
-                        "spring.controller.npe_risk",
-                        i,
-                        "变量来自 Map.get 后未判空即调用方法，存在 NPE 风险",
-                        line,
+                    var = re.escape(m.group(1))
+                    guarded = re.search(
+                        rf"\b{var}\s*==\s*null|\b{var}\s*!=\s*null|"
+                        rf"requireNonNull\s*\(\s*{var}|Objects\.nonNull\s*\(\s*{var}|"
+                        rf"\b{var}\s*\.\s*isBlank\s*\(|\b{var}\s*\.\s*isEmpty\s*\(",
+                        prev,
                     )
+                    if not guarded:
+                        add(
+                            f"{rel}:{i}:npe-chain",
+                            "medium",
+                            "spring.controller.npe_risk",
+                            i,
+                            "变量来自 Map.get 后未判空即调用方法，存在 NPE 风险",
+                            line,
+                        )
 
     # Service: @Transactional + this.xxx(
     if name.endswith("Service.java"):

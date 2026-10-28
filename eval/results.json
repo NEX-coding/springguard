@@ -1,11 +1,19 @@
 {
   "cases": 6,
+  "projects": {
+    "buggy": "samples/spring-buggy",
+    "clean": "samples/spring-clean"
+  },
   "modes": {
     "spring_guard": {
       "findings": 7,
       "tp": 6,
       "recall": 1.0,
-      "missed": []
+      "missed": [],
+      "matched_findings": 7,
+      "unmatched_findings": 0,
+      "precision": 1.0,
+      "precision_with_clean": 1.0
     },
     "ocr_only": {
       "findings": 0,
@@ -18,13 +26,25 @@
         "tx-swallow",
         "sql-concat",
         "mybatis-dollar"
-      ]
+      ],
+      "matched_findings": 0,
+      "unmatched_findings": 0,
+      "precision": 1.0
     },
     "hybrid": {
       "findings": 7,
       "tp": 6,
       "recall": 1.0,
-      "missed": []
+      "missed": [],
+      "matched_findings": 7,
+      "unmatched_findings": 0,
+      "precision": 1.0
     }
+  },
+  "clean": {
+    "findings": 0,
+    "false_positives": 0,
+    "precision": 1.0,
+    "rules": []
   }
 }

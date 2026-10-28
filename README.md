@@ -14,7 +14,7 @@
 | Spring 事务自调用 | 依赖模型临场发挥 | **确定性规则可复现** |
 | `@RequestBody` 缺 `@Valid` | 可能漏/飘 | **稳定命中** |
 | MyBatis `${}` | 可能提到 | **强制检出** |
-| 可量化评测 | 需自建 | **`eval/` 金标准 + Recall** |
+| 可量化评测 | 需自建 | **`eval/` 金标准 + Recall/Precision** |
 | 无网/无 API Key | 难 | **Guard 可离线跑** |
 
 ## 架构
@@ -62,12 +62,15 @@ python3 scripts/run_pipeline.py --project samples/spring-buggy             # Gua
 python3 eval/run_eval.py
 ```
 
-### 4. 一键演示（推荐）
+### 4. 一键 Web（本机 / 局域网他人可用）
 
 ```bash
 ./scripts/demo.sh
-# 打开 http://127.0.0.1:5193/  （页面会自动加载 out/ 与评测结果）
+# 本机:    http://127.0.0.1:5193/
+# 局域网:  http://<你的IP>:5193/
 ```
+
+页面可直接：**扫描官方样例**、**上传 Spring/Java 工程 ZIP**、**跑金标准评测**。无需先手跑流水线。
 
 演示口播稿：`docs/DEMO_SCRIPT.md`  
 视频分镜：`docs/VIDEO_SHOTLIST.md`  
@@ -79,7 +82,7 @@ python3 eval/run_eval.py
 提交核对：`docs/SUBMIT_CHECKLIST.md`  
 提交包：上级目录 `SpringGuard_提交包.zip`
 
-> 说明：本地 `qwen3.5:4b` 跑完整 OCR scan 很慢；比赛演示以 **SpringGuard 确定性扫描（Recall=1.0）** 为主，OCR 作为已接通的上游增强（`ocr llm test` 已通过）。
+> 说明：本地小模型完整 OCR scan 较慢；比赛演示以 **SpringGuard（Recall=1.0，干净样例 0 误报）** 为主。负例工程：`samples/spring-clean`。
 
 ## 自研 vs 上游
 

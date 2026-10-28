@@ -35,7 +35,7 @@ Java / Spring Boot 是校园实训与中小团队后端的主流技术栈。代�
 
 1. **自研 SpringGuard**：面向 Controller / Service / Mapper 的确定性规则，结果可复现。  
 2. **开源底座融合**：不改上游源码，通过 `.opencodereview/rule.json` 与外部编排挂接 OCR。  
-3. **可验证**：`eval/gold.json` 六类缺陷，本轮 spring_guard **Recall = 1.0**。  
+3. **可验证**：`eval/gold.json` 六类缺陷 + `spring-clean` 负例；本轮 **Recall = 1.0，Precision = 1.0**。  
 4. **非薄封装**：规则、评测、样例、演示与清单均为团队成果，清单中清晰披露上游。
 
 ---
@@ -145,20 +145,22 @@ Spring 工程 / samples/spring-buggy
 
 ### 5.2 验证方法
 
-- **案例验证**：人工植入 6 类缺陷的 `samples/spring-buggy`  
-- **基准对比**：spring_guard / ocr_only / hybrid 三种模式  
-- **主指标**：Recall = 命中金标准数 / 金标准总数  
+- **正例**：人工植入 6 类缺陷的 `samples/spring-buggy`（测 Recall）  
+- **负例**：对照工程 `samples/spring-clean`（测误报 / Precision）  
+- **基准对比**：spring_guard / ocr_only / hybrid  
+- **主指标**：Recall；辅以 Precision（含干净样例）  
 
 ### 5.3 验证结果（脚本复现）
 
-| 模式 | Findings | TP | Recall | 漏检 |
-|------|----------|----|--------|------|
-| spring_guard | 7 | 6 | **1.00** | 无 |
-| ocr_only（本轮未完成长时 scan） | 0 | 0 | 0.00 | 全部 |
-| hybrid（本轮等同 Guard） | 7 | 6 | **1.00** | 无 |
+| 模式 / 集合 | Findings | TP | Recall | Precision |
+|-------------|----------|----|--------|-----------|
+| spring_guard（buggy） | 7 | 6/6 | **1.00** | **1.00** |
+| spring-clean（负例） | **0** | — | — | **1.00**（无误报） |
+| ocr_only（本轮未完成长时 scan） | 0 | 0 | 0.00 | — |
+| hybrid（本轮等同 Guard） | 7 | 6/6 | **1.00** | 1.00 |
 
-**已达成**：Guard 对六类缺陷全召回；演示闭环可跑。  
-**尚未充分达成**：本地小模型完整 OCR 扫描耗时长，ocr_only / 完整 hybrid 对比待更强算力或 CI 补全；Precision 待负例集。
+**已达成**：六类缺陷全召回；干净工程 0 误报；演示闭环可跑。  
+**尚未充分达成**：本地小模型完整 OCR 扫描耗时长，ocr_only 对比待补全。
 
 复现命令：
 
