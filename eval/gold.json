@@ -1,0 +1,41 @@
+{
+  "project": "samples/spring-buggy",
+  "bugs": [
+    {
+      "id": "missing-valid",
+      "file_contains": "UserController.java",
+      "rule_any": ["spring.controller.missing_valid", "Valid", "Validated", "RequestBody"],
+      "note": "Controller @RequestBody 缺校验"
+    },
+    {
+      "id": "npe-chain",
+      "file_contains": "UserController.java",
+      "rule_any": ["spring.controller.npe_risk", "NPE", "null", "toLowerCase"],
+      "note": "name.toLowerCase NPE"
+    },
+    {
+      "id": "tx-self",
+      "file_contains": "UserService.java",
+      "rule_any": ["spring.service.tx_self_invocation", "Transactional", "self", "this."],
+      "note": "事务自调用"
+    },
+    {
+      "id": "tx-swallow",
+      "file_contains": "UserService.java",
+      "rule_any": ["spring.service.tx_swallow_exception", "swallow", "catch", "回滚"],
+      "note": "事务吞异常"
+    },
+    {
+      "id": "sql-concat",
+      "file_contains": "UserService.java",
+      "rule_any": ["spring.sql.string_concat", "inject", "拼接", "LIKE"],
+      "note": "SQL 字符串拼接"
+    },
+    {
+      "id": "mybatis-dollar",
+      "file_contains": "UserMapper.java",
+      "rule_any": ["spring.mybatis.dollar_injection", "${", "inject", "注入"],
+      "note": "MyBatis ${}"
+    }
+  ]
+}

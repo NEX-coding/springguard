@@ -1,0 +1,30 @@
+{
+  "cases": 6,
+  "modes": {
+    "spring_guard": {
+      "findings": 7,
+      "tp": 6,
+      "recall": 1.0,
+      "missed": []
+    },
+    "ocr_only": {
+      "findings": 0,
+      "tp": 0,
+      "recall": 0.0,
+      "missed": [
+        "missing-valid",
+        "npe-chain",
+        "tx-self",
+        "tx-swallow",
+        "sql-concat",
+        "mybatis-dollar"
+      ]
+    },
+    "hybrid": {
+      "findings": 7,
+      "tp": 6,
+      "recall": 1.0,
+      "missed": []
+    }
+  }
+}

@@ -1,0 +1,9 @@
+.venv*/
+docs/_print/
+__pycache__/
+*.pyc
+.DS_Store
+*.aiff
+*.wav
+node_modules/
+docs/DEMO_VIDEO_DRAFT.mp4

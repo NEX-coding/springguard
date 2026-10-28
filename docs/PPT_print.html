@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>SpringGuard 答辩 PPT</title>
+<style>
+  @page { size: landscape; margin: 0; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    color: #e8eef4;
+    background: #000;
+  }
+  .slide {
+    width: 100vw;
+    height: 100vh;
+    padding: 8vh 7vw;
+    page-break-after: always;
+    break-after: page;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background:
+      radial-gradient(ellipse 80% 50% at 10% 0%, rgba(61,154,122,.18), transparent 55%),
+      linear-gradient(160deg, #0f1419 0%, #152028 50%, #0c1015 100%);
+  }
+  .slide:last-child { page-break-after: auto; }
+  .brand { font-size: 14pt; letter-spacing: .12em; color: #3d9a7a; margin-bottom: 16pt; }
+  h1 { font-size: 36pt; margin: 0 0 14pt; }
+  h2 { font-size: 28pt; margin: 0 0 18pt; }
+  p, li { font-size: 16pt; color: #9aabbc; line-height: 1.5; }
+  .tagline { color: #e8eef4; font-size: 18pt; max-width: 40rem; }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { margin: .4em 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 15pt; }
+  th, td { border-bottom: 1px solid #2a3542; padding: 10pt 8pt; text-align: left; }
+  th { color: #3d9a7a; }
+  .ok { color: #3d9a7a; font-weight: 700; }
+  .grid { display: flex; gap: 24pt; }
+  .card {
+    flex: 1; background: #1a222c; border: 1px solid #2a3542; border-radius: 12px;
+    padding: 16pt 18pt;
+  }
+  .card h3 { margin: 0 0 8pt; color: #e8eef4; font-size: 16pt; }
+  pre {
+    background: #1a222c; border: 1px solid #2a3542; border-radius: 10px;
+    padding: 14pt 16pt; font-size: 13pt; color: #c5d5e0; white-space: pre-wrap;
+  }
+  code { font-family: ui-monospace, Menlo, monospace; color: #b8d4c8; }
+</style>
+</head>
+<body>
+
+<section class="slide">
+  <div class="brand">AIC · AI+开源</div>
+  <h1>SpringGuard</h1>
+  <p class="tagline">基于 Open Code Review 的 Spring 智能审查增强<br/>确定性规则 × 可选 AI × 可复现评测</p>
+</section>
+
+<section class="slide">
+  <h2>问题：Spring 审查的痛点</h2>
+  <ul>
+    <li>事务自调用失效、缺 <code>@Valid</code>、MyBatis <code>${}</code> 注入</li>
+    <li>纯 LLM：不稳定、难复核、成本高</li>
+    <li>纯静态工具：缺语义叙述与开源 Agent 生态</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>目标</h2>
+  <ul>
+    <li>无模型也能稳定检出核心 Spring 缺陷</li>
+    <li>可挂接上游 OCR + 本地 Ollama</li>
+    <li>金标准评测，拒绝「模型自评」</li>
+    <li>开源边界清晰：自研 vs 上游可核对</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>开源选型</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>上游</h3>
+      <p><strong style="color:#3d9a7a">alibaba/open-code-review</strong><br/>确定性工程 × Agent<br/>自定义规则包 · JSON 输出</p>
+    </div>
+    <div class="card">
+      <h3>为什么选它</h3>
+      <p>可扩展、可本地模型、<br/>二次开发切口清晰、<br/>避免从零造审查引擎</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <h2>方案架构</h2>
+  <pre>Spring 工程
+  ├─ SpringGuard（自研静态规则）→ findings
+  └─ OCR + rule.json（可选）   → findings
+         └─ merge → eval → web</pre>
+</section>
+
+<section class="slide">
+  <h2>创新点（相对薄封装）</h2>
+  <ul>
+    <li><strong style="color:#e8eef4">SpringGuard</strong>：Controller / Service / Mapper 确定性规则</li>
+    <li><strong style="color:#e8eef4">规则包</strong>：<code>.opencodereview/rule.json</code> 领域提示</li>
+    <li><strong style="color:#e8eef4">混合流水线</strong>：编排 + 归一化合并</li>
+    <li><strong style="color:#e8eef4">金标准评测</strong>：6 类缺陷 Recall</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>评测结果（可脚本复现）</h2>
+  <table>
+    <tr><th>模式</th><th>TP</th><th>Recall</th></tr>
+    <tr><td>spring_guard</td><td>6/6</td><td class="ok">1.00</td></tr>
+    <tr><td>ocr_only（本轮长时未完成）</td><td>0</td><td>0.00</td></tr>
+    <tr><td>hybrid（本轮≈Guard）</td><td>6/6</td><td class="ok">1.00</td></tr>
+  </table>
+  <p style="margin-top:18pt">演示以 Guard 为主；OCR 连通性已验证（<code>ocr llm test</code>）。</p>
+</section>
+
+<section class="slide">
+  <h2>自研 vs 上游</h2>
+  <table>
+    <tr><th>模块</th><th>归属</th></tr>
+    <tr><td>Open Code Review CLI</td><td>上游 Apache-2.0</td></tr>
+    <tr><td>SpringGuard 引擎</td><td class="ok">自研</td></tr>
+    <tr><td>Spring 规则包 / 评测 / 样例 / 演示</td><td class="ok">自研</td></tr>
+  </table>
+</section>
+
+<section class="slide">
+  <h2>一键演示</h2>
+  <pre>./scripts/demo.sh
+# → http://127.0.0.1:5193/
+# Recall = 1.0（spring_guard）</pre>
+  <p>口播稿：<code>docs/DEMO_SCRIPT.md</code></p>
+</section>
+
+<section class="slide">
+  <h2>总结</h2>
+  <p class="tagline">把开源 AI 审查底座，变成可复现的 Spring 工程安全网。</p>
+  <ul style="margin-top:18pt">
+    <li>后续：负例集 / Precision、CI 接入、更多 Spring 规则</li>
+  </ul>
+</section>
+
+</body>
+</html>

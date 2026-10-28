@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SpringGuard · 答辩 PPT</title>
+<style>
+  :root {
+    --bg: #0f1419;
+    --panel: #1a222c;
+    --text: #e8eef4;
+    --muted: #9aabbc;
+    --accent: #3d9a7a;
+    --warn: #d4a017;
+    --line: #2a3542;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: #000; color: var(--text);
+    font-family: "PingFang SC", "Noto Sans SC", "Helvetica Neue", sans-serif; }
+  .deck { height: 100%; overflow: hidden; }
+  .slide {
+    display: none; height: 100%; padding: 4.5vh 6vw;
+    background:
+      radial-gradient(ellipse 80% 50% at 10% 0%, rgba(61,154,122,.18), transparent 55%),
+      linear-gradient(160deg, #0f1419 0%, #152028 50%, #0c1015 100%);
+  }
+  .slide.active { display: flex; flex-direction: column; justify-content: center; }
+  .brand { font-size: .95rem; letter-spacing: .12em; color: var(--accent); text-transform: uppercase; margin-bottom: 1rem; }
+  h1 { font-size: clamp(2rem, 4.2vw, 3.2rem); margin: 0 0 .8rem; font-weight: 700; line-height: 1.2; }
+  h2 { font-size: clamp(1.6rem, 3vw, 2.3rem); margin: 0 0 1.2rem; }
+  p, li { font-size: clamp(1.05rem, 1.6vw, 1.35rem); color: var(--muted); line-height: 1.55; }
+  ul { margin: 0; padding-left: 1.2rem; }
+  li { margin: .45rem 0; }
+  .tagline { color: var(--text); font-size: clamp(1.15rem, 2vw, 1.5rem); max-width: 42rem; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .card {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+    padding: 1.2rem 1.4rem;
+  }
+  .card h3 { margin: 0 0 .6rem; color: var(--text); font-size: 1.15rem; }
+  .card strong { color: var(--accent); }
+  table { width: 100%; border-collapse: collapse; font-size: 1.05rem; }
+  th, td { border-bottom: 1px solid var(--line); padding: .65rem .5rem; text-align: left; }
+  th { color: var(--accent); font-weight: 600; }
+  .hl { color: var(--warn); font-weight: 700; }
+  .ok { color: var(--accent); font-weight: 700; }
+  .footer {
+    position: fixed; left: 0; right: 0; bottom: 0; padding: .6rem 6vw;
+    display: flex; justify-content: space-between; color: #6b7c8d; font-size: .85rem;
+    background: linear-gradient(transparent, rgba(0,0,0,.55));
+  }
+  .hint { position: fixed; right: 1.2rem; top: 1rem; color: #6b7c8d; font-size: .8rem; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: #b8d4c8; }
+  pre {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+    padding: 1rem 1.2rem; font-size: .95rem; overflow: auto; color: #c5d5e0;
+  }
+</style>
+</head>
+<body>
+<div class="hint">← → / 空格翻页 · F 全屏</div>
+<div class="deck" id="deck">
+
+<section class="slide active">
+  <div class="brand">AIC · AI+开源</div>
+  <h1>SpringGuard</h1>
+  <p class="tagline">基于 Open Code Review 的 Spring 智能审查增强<br/>确定性规则 × 可选 AI × 可复现评测</p>
+</section>
+
+<section class="slide">
+  <h2>问题：Spring 审查的痛点</h2>
+  <ul>
+    <li>事务自调用失效、缺 <code>@Valid</code>、MyBatis <code>${}</code> 注入</li>
+    <li>纯 LLM：不稳定、难复核、成本高</li>
+    <li>纯静态工具：缺语义叙述与开源 Agent 生态</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>目标</h2>
+  <ul>
+    <li>无模型也能稳定检出核心 Spring 缺陷</li>
+    <li>可挂接上游 OCR + 本地 Ollama</li>
+    <li>金标准评测，拒绝「模型自评」</li>
+    <li>开源边界清晰：自研 vs 上游可核对</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>开源选型</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>上游</h3>
+      <p><strong>alibaba/open-code-review</strong><br/>确定性工程 × Agent<br/>自定义规则包 · JSON 输出</p>
+    </div>
+    <div class="card">
+      <h3>为什么选它</h3>
+      <p>可扩展、可本地模型、<br/>二次开发切口清晰、<br/>避免从零造审查引擎</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <h2>方案架构</h2>
+<pre>Spring 工程
+  ├─ SpringGuard（自研静态规则）→ findings
+  └─ OCR + rule.json（可选）   → findings
+         └─ merge → eval → web</pre>
+</section>
+
+<section class="slide">
+  <h2>创新点（相对薄封装）</h2>
+  <ul>
+    <li><strong>SpringGuard</strong>：Controller / Service / Mapper 确定性规则</li>
+    <li><strong>规则包</strong>：<code>.opencodereview/rule.json</code> 领域提示</li>
+    <li><strong>混合流水线</strong>：编排 + 归一化合并</li>
+    <li><strong>金标准评测</strong>：6 类缺陷 Recall</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>评测结果（可脚本复现）</h2>
+  <table>
+    <tr><th>模式</th><th>TP</th><th>Recall</th></tr>
+    <tr><td>spring_guard</td><td>6/6</td><td class="ok">1.00</td></tr>
+    <tr><td>ocr_only（本轮长时未完成）</td><td>0</td><td>0.00</td></tr>
+    <tr><td>hybrid（本轮≈Guard）</td><td>6/6</td><td class="ok">1.00</td></tr>
+  </table>
+  <p style="margin-top:1rem">演示以 Guard 为主；OCR 连通性已验证（<code>ocr llm test</code>）。</p>
+</section>
+
+<section class="slide">
+  <h2>自研 vs 上游</h2>
+  <table>
+    <tr><th>模块</th><th>归属</th></tr>
+    <tr><td>Open Code Review CLI</td><td>上游 Apache-2.0</td></tr>
+    <tr><td>SpringGuard 引擎</td><td class="ok">自研</td></tr>
+    <tr><td>Spring 规则包 / 评测 / 样例 / 演示</td><td class="ok">自研</td></tr>
+  </table>
+</section>
+
+<section class="slide">
+  <h2>一键演示</h2>
+<pre>./scripts/demo.sh
+# → http://127.0.0.1:5193/
+# Recall = 1.0（spring_guard）</pre>
+  <p>口播稿：<code>docs/DEMO_SCRIPT.md</code></p>
+</section>
+
+<section class="slide">
+  <h2>总结</h2>
+  <p class="tagline">把开源 AI 审查底座，变成可复现的 Spring 工程安全网。</p>
+  <ul style="margin-top:1.2rem">
+    <li>后续：负例集 / Precision、CI 接入、更多 Spring 规则</li>
+  </ul>
+</section>
+
+</div>
+<div class="footer">
+  <span>SpringGuard</span>
+  <span id="page">1 / 10</span>
+</div>
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  let i = 0;
+  const page = document.getElementById('page');
+  function show(n) {
+    i = (n + slides.length) % slides.length;
+    slides.forEach((s, k) => s.classList.toggle('active', k === i));
+    page.textContent = `${i + 1} / ${slides.length}`;
+  }
+  window.addEventListener('keydown', e => {
+    if (['ArrowRight','PageDown',' ','Enter'].includes(e.key)) { e.preventDefault(); show(i + 1); }
+    if (['ArrowLeft','PageUp'].includes(e.key)) { e.preventDefault(); show(i - 1); }
+    if (e.key === 'f' || e.key === 'F') document.documentElement.requestFullscreen?.();
+  });
+</script>
+</body>
+</html>

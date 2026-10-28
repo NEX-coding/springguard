@@ -1,0 +1,31 @@
+{
+  "include": ["**/*.java", "**/*mapper*.xml", "**/pom.xml", "**/application*.yml", "**/application*.yaml"],
+  "exclude": ["**/target/**", "**/.git/**"],
+  "rules": [
+    {
+      "path": "**/*Controller.java",
+      "merge_system_rule": true,
+      "rule": "Spring MVC / Web 专项（必须检查）：\n1. @RequestBody / 表单入参是否缺少 @Valid/@Validated，以及对应约束注解。\n2. Controller 是否直接返回/接收 JPA Entity（应使用 DTO）。\n3. 是否在 Controller 写业务逻辑或直接调用 Mapper（应下沉 Service）。\n4. 路径变量/查询参数是否做空值与边界校验。\n5. 是否可能泄露堆栈、内部异常信息给客户端。\n只报告有明确证据的问题；给出文件与行号级定位。"
+    },
+    {
+      "path": "**/*Service.java",
+      "merge_system_rule": true,
+      "rule": "Spring Service 专项（必须检查）：\n1. @Transactional 同类自调用（private/this.xxx）导致事务失效。\n2. 事务方法中捕获异常后吞掉且未 rethrow，可能导致事务该回滚未回滚。\n3. 多数据源/只读事务标注是否合理。\n4. 是否在事务中做远程 HTTP/长耗时 IO。\n5. 空指针与集合空判断，尤其 Optional 使用。\n只报告有代码证据的问题。"
+    },
+    {
+      "path": "**/*{Mapper,Repository,Dao}.java",
+      "merge_system_rule": true,
+      "rule": "数据访问专项：\n1. 注解 SQL 或方法名是否有明显 SQL 注入风险（字符串拼接用户输入）。\n2. 更新/删除是否缺少条件导致全表风险。\n3. 分页与大数据量查询是否可能拖垮内存。\n只报告有证据的问题。"
+    },
+    {
+      "path": "**/*mapper*.xml",
+      "merge_system_rule": true,
+      "rule": "MyBatis XML 专项：检查 ${} 误用导致注入、动态 SQL 条件缺失、resultMap 字段映射错误。"
+    },
+    {
+      "path": "**/*.java",
+      "merge_system_rule": true,
+      "rule": "通用 Java/Spring：硬编码密钥、不安全随机数、资源未关闭、并发共享可变状态、日志打印敏感信息。"
+    }
+  ]
+}

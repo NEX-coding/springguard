@@ -1,0 +1,89 @@
+{
+  "project": "/Users/royalchirs/code/比赛/ai+开源/springguard/samples/spring-buggy",
+  "spring_guard": {
+    "count": 7,
+    "by_severity": {
+      "high": 2,
+      "medium": 2,
+      "critical": 3
+    }
+  },
+  "ocr": {
+    "ok": false,
+    "elapsed_sec": null,
+    "error": null,
+    "findings": 0
+  },
+  "findings": [
+    {
+      "id": "src/main/java/com/demo/controller/UserController.java:23:missing-valid",
+      "severity": "high",
+      "rule": "spring.controller.missing_valid",
+      "file": "src/main/java/com/demo/controller/UserController.java",
+      "line": 23,
+      "message": "@RequestBody 入参缺少 @Valid/@Validated",
+      "evidence": "public Map<String, Object> create(@RequestBody Map<String, String> body) {",
+      "source": "spring-guard"
+    },
+    {
+      "id": "src/main/java/com/demo/controller/UserController.java:27:npe-chain",
+      "severity": "medium",
+      "rule": "spring.controller.npe_risk",
+      "file": "src/main/java/com/demo/controller/UserController.java",
+      "line": 27,
+      "message": "变量来自 Map.get 后未判空即调用方法，存在 NPE 风险",
+      "evidence": "return userService.createUser(name.toLowerCase(), email);",
+      "source": "spring-guard"
+    },
+    {
+      "id": "src/main/java/com/demo/mapper/UserMapper.java:16:mybatis-dollar",
+      "severity": "critical",
+      "rule": "spring.mybatis.dollar_injection",
+      "file": "src/main/java/com/demo/mapper/UserMapper.java",
+      "line": 16,
+      "message": "MyBatis 注解使用 ${}，易导致 SQL 注入",
+      "evidence": "// BUG: raw fragment concatenated by caller — high injection risk if used with ${}",
+      "source": "spring-guard"
+    },
+    {
+      "id": "src/main/java/com/demo/mapper/UserMapper.java:17:mybatis-dollar",
+      "severity": "critical",
+      "rule": "spring.mybatis.dollar_injection",
+      "file": "src/main/java/com/demo/mapper/UserMapper.java",
+      "line": 17,
+      "message": "MyBatis 注解使用 ${}，易导致 SQL 注入",
+      "evidence": "@Select(\"${clause}\")",
+      "source": "spring-guard"
+    },
+    {
+      "id": "src/main/java/com/demo/service/UserService.java:24:tx-self-invocation",
+      "severity": "high",
+      "rule": "spring.service.tx_self_invocation",
+      "file": "src/main/java/com/demo/service/UserService.java",
+      "line": 24,
+      "message": "@Transactional 方法内 this.xxx() 自调用，可能导致事务代理失效",
+      "evidence": "return this.saveInternal(name, email);",
+      "source": "spring-guard"
+    },
+    {
+      "id": "src/main/java/com/demo/service/UserService.java:32:tx-swallow",
+      "severity": "medium",
+      "rule": "spring.service.tx_swallow_exception",
+      "file": "src/main/java/com/demo/service/UserService.java",
+      "line": 32,
+      "message": "事务方法中捕获异常后可能吞掉，影响回滚语义",
+      "evidence": "} catch (Exception e) {\n            // BUG: swallow exception inside transaction\n            System.out.println(\"audit failed: \" + e.getMessage());\n        }\n        Map<String, Object> out =",
+      "source": "spring-guard"
+    },
+    {
+      "id": "src/main/java/com/demo/service/UserService.java:44:sql-concat",
+      "severity": "critical",
+      "rule": "spring.sql.string_concat",
+      "file": "src/main/java/com/demo/service/UserService.java",
+      "line": 44,
+      "message": "疑似用字符串拼接构造 SQL/条件，存在注入风险",
+      "evidence": "return userMapper.findByKeyword(\"name LIKE '%\" + keyword + \"%'\");",
+      "source": "spring-guard"
+    }
+  ]
+}
