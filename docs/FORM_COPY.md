@@ -23,11 +23,11 @@ Spring 应用中事务自调用、入参未校验、MyBatis 动态 SQL 注入等
 提交前把仓库放到 GitHub/Gitee/网盘私有仓，链接示例：
 
 ```
-代码仓库：<粘贴仓库 URL>
-演示视频：仓库内 docs/DEMO_VIDEO.mp4（或网盘直链）
-技术报告：docs/TECH_REPORT.pdf
-资源清单：docs/开源及第三方资源使用清单.pdf
-答辩 PPT：docs/PPT.pdf
+代码仓库：https://github.com/NEX-coding/springguard
+演示视频：https://github.com/NEX-coding/springguard/blob/main/docs/DEMO_VIDEO.mp4
+技术报告：https://github.com/NEX-coding/springguard/blob/main/docs/TECH_REPORT.pdf
+资源清单：https://github.com/NEX-coding/springguard/blob/main/docs/开源及第三方资源使用清单.pdf
+答辩 PPT：https://github.com/NEX-coding/springguard/blob/main/docs/PPT.pdf
 运行说明：见仓库 README.md；一键演示 ./scripts/demo.sh
 ```
 
