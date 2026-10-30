@@ -6,171 +6,153 @@
 <style>
   @page { size: 1280px 720px; margin: 0; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; background: #111; }
+  body { font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; background: #0b1220; }
   .slide {
     width: 1280px; height: 720px; overflow: hidden; position: relative;
     page-break-after: always; display: flex; flex-direction: column;
     background: #f4f7fa; color: #0f1c2e;
   }
   .slide:last-child { page-break-after: auto; }
-  .mono { font-family: "SF Mono", "JetBrains Mono", Menlo, monospace; }
   code {
-    font-family: "SF Mono", Menlo, monospace; font-size: .9em;
-    color: #0e7490; background: rgba(14,116,144,.10); padding: 1px 6px;
+    font-family: "SF Mono", Menlo, monospace; font-size: .88em;
+    color: #0e7490; background: rgba(14,116,144,.1); padding: 1px 5px;
   }
+  .mono { font-family: "SF Mono", Menlo, monospace; }
 
-  /* cover */
-  .cover { display: grid; grid-template-columns: 1.2fr .8fr; flex-direction: unset; background: #0f1c2e; color: #f4f7fa; }
-  .cover-l { padding: 58px 56px; display: flex; flex-direction: column; }
-  .cover-r {
-    background: #0e7490; color: #fff; padding: 58px 44px;
-    display: flex; flex-direction: column; justify-content: space-between;
-  }
-  .eyebrow {
-    font: 600 13px/1 "SF Mono", Menlo, monospace;
-    letter-spacing: .2em; text-transform: uppercase; opacity: .65; margin-bottom: 32px;
-  }
-  .cover h1 { font-size: 82px; font-weight: 700; letter-spacing: -.05em; line-height: .95; margin-bottom: 24px; }
-  .cover h1 span { color: #0e7490; }
-  .cover .sub { font-size: 21px; line-height: 1.55; color: #9aa8b8; max-width: 26em; }
-  .cover .bar { margin-top: auto; padding-top: 28px; border-top: 1px solid rgba(242,238,230,.16); }
-  .cover .bar p { font-size: 14px; color: #7b8a9a; }
-  .cover-r .k { font: 600 11px/1 "SF Mono", Menlo, monospace; letter-spacing: .16em; text-transform: uppercase; opacity: .75; margin-bottom: 8px; }
-  .cover-r .v { font-size: 20px; font-weight: 600; line-height: 1.4; margin-bottom: 26px; }
-  .cover-r .v:last-child { margin-bottom: 0; }
-  .cover-r .big { font: 700 68px/1 "SF Mono", Menlo, monospace; letter-spacing: -.05em; }
-  .cover-r .small { font-size: 14px; opacity: .8; margin-top: 8px; }
+  .cover { display: grid; grid-template-columns: 1.15fr .85fr; flex-direction: unset; background: #0f1c2e; color: #f4f7fa; }
+  .cover-l { padding: 52px 52px; display: flex; flex-direction: column; }
+  .cover-r { background: #0e7490; color: #fff; padding: 52px 40px; display: flex; flex-direction: column; }
+  .eyebrow { font: 600 12px/1 "SF Mono", Menlo, monospace; letter-spacing: .18em; text-transform: uppercase; opacity: .65; margin-bottom: 26px; }
+  .cover h1 { font-size: 72px; font-weight: 700; letter-spacing: -.045em; line-height: .95; margin-bottom: 18px; }
+  .cover h1 span { color: #5eead4; }
+  .cover .sub { font-size: 19px; line-height: 1.55; color: #9aa8b8; max-width: 28em; margin-bottom: 28px; }
+  .cover .chips { display: grid; gap: 10px; margin-top: auto; }
+  .cover .chip { border: 1px solid rgba(255,255,255,.14); padding: 12px 14px; font-size: 14px; color: #c5d0dc; }
+  .cover .chip b { color: #5eead4; font-weight: 600; }
+  .cover-r .block { margin-bottom: 22px; padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,.22); }
+  .cover-r .block:last-of-type { border-bottom: 0; margin-bottom: 0; }
+  .cover-r .k { font: 600 11px/1 "SF Mono", Menlo, monospace; letter-spacing: .14em; text-transform: uppercase; opacity: .8; margin-bottom: 8px; }
+  .cover-r .v { font-size: 18px; font-weight: 600; line-height: 1.4; }
+  .cover-r .page { margin-top: auto; padding-top: 24px; }
+  .cover-r .page .big { font: 700 56px/1 "SF Mono", Menlo, monospace; }
+  .cover-r .page .s { font-size: 13px; opacity: .85; margin-top: 6px; }
 
-  .head {
-    padding: 40px 56px 0; display: flex; justify-content: space-between; align-items: baseline; flex-shrink: 0;
-  }
-  .sec { font: 700 12px/1 "SF Mono", Menlo, monospace; letter-spacing: .18em; text-transform: uppercase; color: #0e7490; }
+  .head { padding: 32px 48px 0; display: flex; justify-content: space-between; align-items: baseline; flex-shrink: 0; }
+  .sec { font: 700 12px/1 "SF Mono", Menlo, monospace; letter-spacing: .16em; text-transform: uppercase; color: #0e7490; }
   .pg { font: 500 12px/1 "SF Mono", Menlo, monospace; color: #7b8a9a; }
-  .title {
-    padding: 18px 56px 20px; flex-shrink: 0;
-    font-size: 38px; font-weight: 700; letter-spacing: -.03em; line-height: 1.15; max-width: 17em;
-  }
+  .title { padding: 14px 48px 16px; font-size: 32px; font-weight: 700; letter-spacing: -.03em; line-height: 1.2; flex-shrink: 0; }
   .title em { font-style: normal; color: #0e7490; }
-  .body { flex: 1; min-height: 0; padding: 0 56px 36px; display: flex; flex-direction: column; }
-  .foot {
-    margin-top: auto; padding-top: 14px;
-    font: 500 12px/1.4 "SF Mono", Menlo, monospace; color: #7b8a9a;
-  }
+  .body { flex: 1; min-height: 0; padding: 0 48px 28px; display: flex; flex-direction: column; gap: 14px; }
+  .foot { font: 500 12px/1.4 "SF Mono", Menlo, monospace; color: #7b8a9a; padding-top: 4px; }
 
-  /* scene 2x2 */
   .g2 { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 12px; flex: 1; min-height: 0; }
-  .card {
-    background: #fff; border-left: 5px solid #0e7490; padding: 22px 22px;
-    display: flex; flex-direction: column; gap: 8px;
-  }
-  .card .i { font: 700 26px/1 "SF Mono", Menlo, monospace; color: #0e7490; }
-  .card h3 { font-size: 20px; }
-  .card p { font-size: 15px; color: #475569; line-height: 1.45; }
+  .card { background: #fff; border: 1px solid #dbe3ec; border-left: 4px solid #0e7490; padding: 18px 18px; display: flex; flex-direction: column; gap: 8px; }
+  .card .i { font: 700 22px/1 "SF Mono", Menlo, monospace; color: #0e7490; }
+  .card h3 { font-size: 18px; }
+  .card p { font-size: 14px; color: #475569; line-height: 1.45; }
+  .card ul { list-style: none; display: grid; gap: 5px; margin-top: 4px; }
+  .card li { font-size: 13px; color: #64748b; padding-left: 12px; position: relative; }
+  .card li::before { content: ""; width: 5px; height: 5px; background: #0e7490; position: absolute; left: 0; top: 6px; opacity: .7; }
 
-  /* arch full width bands */
-  .arch { display: grid; grid-template-columns: 1fr 1.15fr 1fr; flex: 1; min-height: 0; margin: 0 56px 40px; }
-  .arch > div { padding: 26px 24px; display: flex; flex-direction: column; gap: 12px; }
-  .arch .a { background: #fff; }
+  .arch { display: grid; grid-template-columns: 1fr 1.2fr 1fr; flex: 1; min-height: 0; gap: 0; }
+  .arch > div { padding: 22px 20px; display: flex; flex-direction: column; gap: 10px; border: 1px solid transparent; }
+  .arch .a { background: #fff; border-color: #dbe3ec; }
   .arch .b { background: #0f1c2e; color: #f4f7fa; }
   .arch .c { background: #0e7490; color: #fff; }
-  .arch .tag { font: 700 11px/1 "SF Mono", Menlo, monospace; letter-spacing: .18em; text-transform: uppercase; opacity: .6; }
-  .arch h3 { font-size: 24px; }
-  .arch p { font-size: 14px; line-height: 1.45; opacity: .85; }
-  .arch ul { list-style: none; margin-top: auto; display: grid; gap: 8px; }
-  .arch li { font-size: 14px; padding-left: 12px; position: relative; }
-  .arch li::before { content: ""; width: 5px; height: 5px; background: currentColor; position: absolute; left: 0; top: 6px; opacity: .65; }
-
-  /* fusion */
-  .fusion { display: grid; grid-template-columns: 1fr 1fr; flex: 1; min-height: 0; margin: 0 56px 40px; }
-  .fusion > div { padding: 28px 28px; display: flex; flex-direction: column; }
-  .fusion .l { background: #fff; }
-  .fusion .r { background: #0f1c2e; color: #f4f7fa; }
-  .fusion .tag { font: 700 11px/1 "SF Mono", Menlo, monospace; letter-spacing: .16em; text-transform: uppercase; color: #0e7490; margin-bottom: 12px; }
-  .fusion .r .tag { color: #5eead4; }
-  .fusion h3 { font-size: 26px; margin-bottom: 16px; }
-  .fusion ul { list-style: none; display: grid; gap: 0; }
-  .fusion li {
-    font-size: 17px; padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,.08); line-height: 1.35;
+  .arch .tag { font: 700 11px/1 "SF Mono", Menlo, monospace; letter-spacing: .14em; text-transform: uppercase; opacity: .65; }
+  .arch h3 { font-size: 22px; }
+  .arch p { font-size: 13px; line-height: 1.45; opacity: .9; }
+  .arch ul { list-style: none; display: grid; gap: 8px; margin-top: 8px; }
+  .arch li { font-size: 13px; line-height: 1.35; padding-left: 12px; position: relative; }
+  .arch li::before { content: ""; width: 5px; height: 5px; background: currentColor; position: absolute; left: 0; top: 6px; opacity: .7; }
+  .arch .step {
+    margin-top: 10px; padding: 10px 12px; font: 500 12px/1.4 "SF Mono", Menlo, monospace;
+    background: rgba(0,0,0,.04);
   }
+  .arch .b .step { background: rgba(255,255,255,.08); }
+  .arch .c .step { background: rgba(0,0,0,.12); }
+
+  .fusion { display: grid; grid-template-columns: 1fr 1fr; flex: 1; min-height: 0; gap: 12px; }
+  .fusion > div { padding: 22px 22px; display: flex; flex-direction: column; border: 1px solid #dbe3ec; background: #fff; }
+  .fusion .r { background: #0f1c2e; color: #f4f7fa; border-color: #0f1c2e; }
+  .fusion .tag { font: 700 11px/1 "SF Mono", Menlo, monospace; letter-spacing: .14em; text-transform: uppercase; color: #0e7490; margin-bottom: 10px; }
+  .fusion .r .tag { color: #5eead4; }
+  .fusion h3 { font-size: 22px; margin-bottom: 12px; }
+  .fusion ul { list-style: none; display: grid; gap: 0; flex: 1; }
+  .fusion li { font-size: 15px; padding: 11px 0; border-bottom: 1px solid rgba(15,28,46,.08); line-height: 1.4; }
   .fusion .r li { border-bottom-color: rgba(255,255,255,.12); }
   .fusion li:last-child { border-bottom: 0; }
+  .fusion .why { margin-top: 12px; font-size: 13px; line-height: 1.45; opacity: .8; }
 
-  /* built */
-  .built { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; flex: 1; min-height: 0; }
-  .built article { background: #fff; padding: 24px 22px; display: flex; flex-direction: column; gap: 10px; }
-  .built .ix { font: 700 44px/1 "SF Mono", Menlo, monospace; color: #0e7490; letter-spacing: -.04em; }
-  .built h3 { font-size: 20px; }
-  .built p { font-size: 14px; color: #475569; line-height: 1.45; margin-top: auto; }
+  .built { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; flex: 1; min-height: 0; }
+  .built article { background: #fff; border: 1px solid #dbe3ec; padding: 18px 16px; display: flex; flex-direction: column; gap: 8px; }
+  .built .ix { font: 700 28px/1 "SF Mono", Menlo, monospace; color: #0e7490; }
+  .built h3 { font-size: 18px; }
+  .built .path { font: 500 12px/1.3 "SF Mono", Menlo, monospace; color: #0e7490; }
+  .built ul { list-style: none; display: grid; gap: 7px; margin-top: 6px; }
+  .built li { font-size: 13px; color: #475569; line-height: 1.4; padding-left: 11px; position: relative; }
+  .built li::before { content: ""; width: 5px; height: 5px; background: #0e7490; position: absolute; left: 0; top: 6px; }
 
-  /* kpi */
   .kpi { background: #0f1c2e; color: #f4f7fa; }
   .kpi .sec { color: #5eead4; }
-  .kpi .pg { color: #94a3b8; }
+  .kpi .pg, .kpi .foot { color: #94a3b8; }
   .kpi .title { color: #f4f7fa; }
   .kpi .title em { color: #5eead4; }
-  .kpi .foot { color: #94a3b8; }
-  .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-bottom: 18px; }
-  .metrics .box {
-    background: #152338; padding: 24px 22px; min-height: 150px;
-    display: flex; flex-direction: column; justify-content: space-between;
-  }
-  .metrics .box.hot { background: #0e7490; }
-  .metrics .n { font: 700 64px/1 "SF Mono", Menlo, monospace; letter-spacing: -.05em; }
-  .metrics .l { font-size: 15px; opacity: .9; line-height: 1.35; }
-  table.t { width: 100%; border-collapse: collapse; font-size: 15px; }
-  table.t th, table.t td { text-align: left; padding: 10px 0; border-bottom: 1px solid rgba(242,238,230,.12); }
-  table.t th {
-    font: 600 11px/1 "SF Mono", Menlo, monospace; letter-spacing: .12em;
-    text-transform: uppercase; color: #7b8a9a;
-  }
+  .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .metrics .box { background: #152338; border: 1px solid #243247; padding: 18px 16px; min-height: 132px; display: flex; flex-direction: column; justify-content: space-between; }
+  .metrics .box.hot { background: #0e7490; border-color: #0e7490; }
+  .metrics .n { font: 700 52px/1 "SF Mono", Menlo, monospace; letter-spacing: -.04em; }
+  .metrics .l { font-size: 14px; opacity: .92; line-height: 1.35; }
+  .split2 { display: grid; grid-template-columns: 1.2fr .8fr; gap: 12px; flex: 1; min-height: 0; }
+  table.t { width: 100%; border-collapse: collapse; font-size: 14px; background: #152338; }
+  table.t th, table.t td { text-align: left; padding: 11px 12px; border-bottom: 1px solid #243247; }
+  table.t th { font: 600 11px/1 "SF Mono", Menlo, monospace; letter-spacing: .1em; text-transform: uppercase; color: #94a3b8; }
   table.t .ok { color: #5eead4; font-family: "SF Mono", Menlo, monospace; font-weight: 600; }
+  .sidebox { background: #152338; border: 1px solid #243247; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .sidebox h4 { font-size: 15px; color: #5eead4; }
+  .sidebox p, .sidebox li { font-size: 13px; color: #c5d0dc; line-height: 1.45; }
+  .sidebox ul { list-style: none; display: grid; gap: 8px; }
+  .sidebox li { padding-left: 12px; position: relative; }
+  .sidebox li::before { content: ""; width: 5px; height: 5px; background: #5eead4; position: absolute; left: 0; top: 6px; }
 
-  /* vs */
-  .vs { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; flex: 1; min-height: 0; }
-  .vs > div { padding: 26px 24px; display: flex; flex-direction: column; }
-  .vs .old { background: #e2e8f0; }
-  .vs .new { background: #0e7490; color: #fff; }
-  .vs .tag { font: 700 11px/1 "SF Mono", Menlo, monospace; letter-spacing: .14em; text-transform: uppercase; opacity: .65; margin-bottom: 10px; }
-  .vs h3 { font-size: 24px; margin-bottom: 16px; }
-  .vs ul { list-style: none; display: grid; gap: 11px; }
-  .vs li { font-size: 16px; line-height: 1.4; }
+  .vs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; flex: 1; min-height: 0; }
+  .vs > div { padding: 20px 18px; display: flex; flex-direction: column; gap: 8px; border: 1px solid #dbe3ec; background: #fff; }
+  .vs .new { background: #0e7490; color: #fff; border-color: #0e7490; }
+  .vs .tag { font: 700 11px/1 "SF Mono", Menlo, monospace; letter-spacing: .12em; text-transform: uppercase; opacity: .7; }
+  .vs h3 { font-size: 20px; }
+  .vs ul { list-style: none; display: grid; gap: 9px; margin-top: 6px; }
+  .vs li { font-size: 14px; line-height: 1.4; }
 
-  /* open */
-  .open .row {
-    display: grid; grid-template-columns: 64px 1fr; gap: 16px; align-items: start;
-    padding: 16px 0; border-bottom: 1px solid rgba(20,20,20,.1);
-  }
-  .open .row:last-of-type { border-bottom: 0; }
-  .open .n { font: 700 26px/1 "SF Mono", Menlo, monospace; color: #0e7490; }
-  .open h3 { font-size: 20px; margin-bottom: 4px; }
-  .open p { font-size: 15px; color: #475569; }
-  .repo { margin-top: 16px; font: 600 20px/1.3 "SF Mono", Menlo, monospace; }
-  .repo span { color: #0e7490; }
+  .open { display: grid; grid-template-columns: 1.1fr .9fr; gap: 12px; flex: 1; min-height: 0; }
+  .open .list { background: #fff; border: 1px solid #dbe3ec; padding: 8px 18px; }
+  .open .row { display: grid; grid-template-columns: 48px 1fr; gap: 12px; padding: 14px 0; border-bottom: 1px solid #e8eef4; }
+  .open .row:last-child { border-bottom: 0; }
+  .open .n { font: 700 22px/1 "SF Mono", Menlo, monospace; color: #0e7490; padding-top: 2px; }
+  .open h3 { font-size: 17px; margin-bottom: 4px; }
+  .open p { font-size: 13px; color: #475569; line-height: 1.4; }
+  .open .panel { background: #0f1c2e; color: #f4f7fa; padding: 20px 18px; display: flex; flex-direction: column; gap: 12px; }
+  .open .panel h4 { font-size: 15px; color: #5eead4; }
+  .open .panel p { font-size: 13px; color: #c5d0dc; line-height: 1.45; }
+  .open .panel .repo { font: 600 15px/1.3 "SF Mono", Menlo, monospace; color: #fff; margin-top: auto; }
+  .open .panel .repo span { color: #5eead4; }
 
-  /* road */
-  .road { display: grid; grid-template-columns: repeat(3, 1fr); flex: 1; min-height: 0; margin: 0 56px 40px; }
-  .road > div {
-    background: #fff; padding: 26px 22px; border-right: 1px solid rgba(20,20,20,.08);
-    display: flex; flex-direction: column; gap: 10px;
-  }
-  .road > div:last-child { border-right: 0; }
-  .road .n { font: 700 36px/1 "SF Mono", Menlo, monospace; color: #0e7490; }
-  .road h3 { font-size: 20px; }
-  .road p { font-size: 14px; color: #475569; line-height: 1.45; margin-top: auto; }
+  .road { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; flex: 1; min-height: 0; }
+  .road > div { background: #fff; border: 1px solid #dbe3ec; padding: 18px 16px; display: flex; flex-direction: column; gap: 8px; }
+  .road .n { font: 700 26px/1 "SF Mono", Menlo, monospace; color: #0e7490; }
+  .road h3 { font-size: 18px; }
+  .road .lead { font-size: 13px; color: #475569; line-height: 1.45; }
+  .road ul { list-style: none; display: grid; gap: 7px; margin-top: 6px; }
+  .road li { font-size: 13px; color: #64748b; line-height: 1.4; padding-left: 11px; position: relative; }
+  .road li::before { content: ""; width: 5px; height: 5px; background: #0e7490; position: absolute; left: 0; top: 6px; }
 
-  /* end */
-  .end {
-    background: #0e7490; color: #fff; justify-content: center; padding: 64px 64px 48px;
-  }
-  .end .eyebrow { color: rgba(255,255,255,.75); }
-  .end h1 { font-size: 80px; font-weight: 700; letter-spacing: -.05em; line-height: .95; margin: 0 0 20px; }
-  .end .sub { font-size: 23px; line-height: 1.5; max-width: 16em; opacity: .95; }
-  .end .repo { color: #fff; margin-top: 40px; }
-  .end .repo span { color: #ccfbf1; }
-  .end .footline {
-    margin-top: auto; display: flex; justify-content: space-between;
-    font: 500 12px/1 "SF Mono", Menlo, monospace; opacity: .75; padding-top: 48px;
-  }
+  .end { background: #0f1c2e; color: #f4f7fa; justify-content: center; padding: 56px 56px 40px; }
+  .end .eyebrow { color: #5eead4; }
+  .end h1 { font-size: 68px; font-weight: 700; letter-spacing: -.045em; margin: 0 0 16px; }
+  .end h1 span { color: #5eead4; }
+  .end .sub { font-size: 20px; line-height: 1.5; color: #9aa8b8; max-width: 20em; }
+  .end .repo { margin-top: 28px; font: 600 18px/1.3 "SF Mono", Menlo, monospace; }
+  .end .repo span { color: #5eead4; }
+  .end .footline { margin-top: auto; display: flex; justify-content: space-between; font: 500 12px/1 "SF Mono", Menlo, monospace; color: #7b8a9a; padding-top: 36px; }
 </style>
 </head>
 <body>
@@ -180,21 +162,17 @@
     <div class="eyebrow">AIC · AI+开源 · 答辩</div>
     <h1>Spring<span>Guard</span></h1>
     <p class="sub">基于 Open Code Review 的 Spring 智能审查增强。<br>确定性规则 × 可选 AI × 可复现评测。</p>
-    <div class="bar"><p class="mono">方向：AI 开发工具与开源协作</p></div>
+    <div class="chips">
+      <div class="chip">方向 <b>AI 开发工具与开源协作</b></div>
+      <div class="chip">定位 <b>领域增强工具 · 非薄封装部署</b></div>
+      <div class="chip">演示保底 <b>无需 API Key 即可跑通</b></div>
+    </div>
   </div>
   <div class="cover-r">
-    <div>
-      <div class="k">形态</div>
-      <div class="v">Web · CLI · 规则包 · 评测</div>
-      <div class="k">验证</div>
-      <div class="v">自建金标准 6/6<br>干净样例 0 误报</div>
-      <div class="k">仓库</div>
-      <div class="v mono" style="font-size:15px">NEX-coding/springguard</div>
-    </div>
-    <div>
-      <div class="big">01</div>
-      <div class="small">/ 10 页</div>
-    </div>
+    <div class="block"><div class="k">形态</div><div class="v">Web · CLI · 规则包 · 评测</div></div>
+    <div class="block"><div class="k">验证</div><div class="v">自建金标准 6/6<br>干净样例 0 误报</div></div>
+    <div class="block"><div class="k">仓库</div><div class="v mono" style="font-size:14px">NEX-coding/springguard</div></div>
+    <div class="page"><div class="big">01</div><div class="s">/ 10 页</div></div>
   </div>
 </section>
 
@@ -203,77 +181,142 @@
   <div class="title">Spring 工程里，这些缺陷<em>反复漏检</em></div>
   <div class="body">
     <div class="g2">
-      <div class="card"><div class="i">01</div><h3>事务失效</h3><p><code>@Transactional</code> 同类自调用；异常吞掉破坏回滚</p></div>
-      <div class="card"><div class="i">02</div><h3>入参未校验</h3><p><code>@RequestBody</code> 缺 <code>@Valid</code>；可空链路直接 NPE</p></div>
-      <div class="card"><div class="i">03</div><h3>注入风险</h3><p>MyBatis 注解误用 <code>${}</code>，进入评审盲区</p></div>
-      <div class="card"><div class="i">04</div><h3>工具缺口</h3><p>纯大模型不稳难复核；纯人工成本高。需要可演示、可复现的工具</p></div>
+      <div class="card">
+        <div class="i">01</div><h3>事务失效</h3>
+        <p><code>@Transactional</code> 同类自调用；异常吞掉破坏回滚</p>
+        <ul><li>代理未生效导致“以为在事务里”</li><li>故障难复现、评审易漏</li></ul>
+      </div>
+      <div class="card">
+        <div class="i">02</div><h3>入参未校验</h3>
+        <p><code>@RequestBody</code> 缺 <code>@Valid</code>；可空链路直接 NPE</p>
+        <ul><li>接口层缺少约束</li><li>运行期才爆，定位成本高</li></ul>
+      </div>
+      <div class="card">
+        <div class="i">03</div><h3>注入风险</h3>
+        <p>MyBatis 注解误用 <code>${}</code>，进入评审盲区</p>
+        <ul><li>字符串拼接 SQL</li><li>安全问题常被当成“能跑就行”</li></ul>
+      </div>
+      <div class="card">
+        <div class="i">04</div><h3>工具缺口</h3>
+        <p>纯大模型不稳难复核；纯人工成本高</p>
+        <ul><li>需要可演示、可复现的审查工具</li><li>目标：学习实训与中小团队后端</li></ul>
+      </div>
     </div>
-    <div class="foot">目标用户：Java / Spring 学习实训与中小团队后端</div>
   </div>
 </section>
 
 <section class="slide">
   <div class="head"><div class="sec">02 · 方案架构</div><div class="pg">03 / 10</div></div>
   <div class="title">一条能当场跑通的<em>审查流水线</em></div>
-  <div class="arch">
-    <div class="a">
-      <div class="tag">Input</div>
-      <h3>工程输入</h3>
-      <p>内置样例或上传 Spring/Java ZIP（≤50MB）</p>
-      <ul><li>spring-buggy 正例</li><li>spring-clean 负例</li><li>真实工程 ZIP</li></ul>
-    </div>
-    <div class="b">
-      <div class="tag">Core</div>
-      <h3>双路径检测</h3>
-      <p>确定性规则为主，OCR / 本地模型可选</p>
-      <ul><li>SpringGuard 静态规则</li><li>.opencodereview/rule.json</li><li>merge → findings</li></ul>
-    </div>
-    <div class="c">
-      <div class="tag">Output</div>
-      <h3>可核验输出</h3>
-      <p>页面证据 + 金标准评测</p>
-      <ul><li>Web :5193</li><li>Recall / Precision</li><li>文件与行号定位</li></ul>
+  <div class="body">
+    <div class="arch">
+      <div class="a">
+        <div class="tag">Input</div>
+        <h3>工程输入</h3>
+        <p>内置样例或上传 Spring/Java ZIP（≤50MB）</p>
+        <ul>
+          <li>spring-buggy：六类已知缺陷</li>
+          <li>spring-clean：干净负例对照</li>
+          <li>真实工程 ZIP 上传扫描</li>
+        </ul>
+        <div class="step">自动定位 src/main/java</div>
+      </div>
+      <div class="b">
+        <div class="tag">Core</div>
+        <h3>双路径检测</h3>
+        <p>确定性规则为主，OCR / 本地模型可选</p>
+        <ul>
+          <li>SpringGuard 静态规则引擎</li>
+          <li>项目级 .opencodereview/rule.json</li>
+          <li>结果字段统一后 merge</li>
+        </ul>
+        <div class="step">演示默认：仅 Guard，秒级出结果</div>
+      </div>
+      <div class="c">
+        <div class="tag">Output</div>
+        <h3>可核验输出</h3>
+        <p>页面证据 + 金标准评测指标</p>
+        <ul>
+          <li>Web :5193 严重度筛选</li>
+          <li>Recall / Precision 脚本复现</li>
+          <li>文件、行号、代码证据</li>
+        </ul>
+        <div class="step">python3 eval/run_eval.py</div>
+      </div>
     </div>
   </div>
 </section>
 
 <section class="slide">
   <div class="head"><div class="sec">03 · AI 与开源融合</div><div class="pg">04 / 10</div></div>
-  <div class="title">底座开源，增强<em>自研</em></div>
-  <div class="fusion">
-    <div class="l">
-      <div class="tag">Upstream</div>
-      <h3>Open Code Review</h3>
-      <ul>
-        <li>alibaba/open-code-review</li>
-        <li>许可证 Apache-2.0</li>
-        <li>未修改上游源码</li>
-        <li>可选接入本地 Ollama</li>
-      </ul>
-    </div>
-    <div class="r">
-      <div class="tag">Team built</div>
-      <h3>SpringGuard 层</h3>
-      <ul>
-        <li>确定性规则引擎</li>
-        <li>项目级 Spring 规则包</li>
-        <li>正负例 + 金标准评测</li>
-        <li>Web 上传与证据展示</li>
-      </ul>
+  <div class="title">底座开源，增强<em>自研</em>，边界清楚</div>
+  <div class="body">
+    <div class="fusion">
+      <div class="l">
+        <div class="tag">Upstream</div>
+        <h3>Open Code Review</h3>
+        <ul>
+          <li>alibaba/open-code-review</li>
+          <li>许可证：Apache-2.0</li>
+          <li>未修改上游源码</li>
+          <li>可选接入本地 Ollama</li>
+          <li>扩展走官方规则包与进程外编排</li>
+        </ul>
+        <p class="why">作用：提供通用 AI 审查入口；本轮模型增益未单独量化，不夸大。</p>
+      </div>
+      <div class="r">
+        <div class="tag">Team built</div>
+        <h3>SpringGuard 层</h3>
+        <ul>
+          <li>确定性规则引擎</li>
+          <li>项目级 Spring 规则包</li>
+          <li>正负例 + 金标准评测</li>
+          <li>Web 上传与证据展示</li>
+          <li>资源清单与开放文档</li>
+        </ul>
+        <p class="why">价值：可定位、可复核、可复现；不是换皮部署上游 CLI。</p>
+      </div>
     </div>
   </div>
 </section>
 
 <section class="slide">
   <div class="head"><div class="sec">04 · 自主实现</div><div class="pg">05 / 10</div></div>
-  <div class="title">团队实际交付了<em>这些</em></div>
+  <div class="title">团队实际交付了<em>完整闭环</em></div>
   <div class="body">
     <div class="built">
-      <article><div class="ix">01</div><h3>规则引擎</h3><p><code>spring_guard.py</code><br>Controller / Service / Mapper 高发缺陷，秒级可复现</p></article>
-      <article><div class="ix">02</div><h3>Web 服务</h3><p><code>app_server.py</code> + 前端<br>样例扫描 · ZIP 上传 · 严重度筛选 · 证据代码</p></article>
-      <article><div class="ix">03</div><h3>评测闭环</h3><p><code>eval/</code> 金标准<br>正例测召回，干净样例测误报</p></article>
+      <article>
+        <div class="ix">01</div>
+        <h3>规则引擎</h3>
+        <div class="path">scripts/spring_guard.py</div>
+        <ul>
+          <li>Controller / Service / Mapper 规则</li>
+          <li>缺 @Valid、事务自调用、${} 等</li>
+          <li>秒级可复现，无模型依赖</li>
+        </ul>
+      </article>
+      <article>
+        <div class="ix">02</div>
+        <h3>Web 服务</h3>
+        <div class="path">app_server.py + web/</div>
+        <ul>
+          <li>样例扫描 / ZIP 上传（≤50MB）</li>
+          <li>严重度筛选与证据代码</li>
+          <li>一键跑金标准评测</li>
+        </ul>
+      </article>
+      <article>
+        <div class="ix">03</div>
+        <h3>评测闭环</h3>
+        <div class="path">eval/ · samples/</div>
+        <ul>
+          <li>gold.json 六类缺陷条目</li>
+          <li>正例测召回，clean 测误报</li>
+          <li>results.json 可脚本复核</li>
+        </ul>
+      </article>
     </div>
-    <div class="foot">另含规则包、编排脚本、演示视频与完整文档</div>
+    <div class="foot">另含规则包、编排脚本、演示视频与技术报告 / 资源清单</div>
   </div>
 </section>
 
@@ -286,13 +329,22 @@
       <div class="box hot"><div class="n">1.0</div><div class="l">精确率 Precision<br>脚本口径 · 含 clean</div></div>
       <div class="box"><div class="n">0</div><div class="l">干净样例误报<br>spring-clean</div></div>
     </div>
-    <table class="t">
-      <tr><th>集合 / 模式</th><th>结果</th></tr>
-      <tr><td>spring-buggy + Guard</td><td class="ok">TP 6/6 · Recall 1.0</td></tr>
-      <tr><td>spring-clean</td><td class="ok">0 findings · 无误报</td></tr>
-      <tr><td>OCR / Hybrid</td><td>可选语义增强；本轮演示以 Guard 为主</td></tr>
-    </table>
-    <div class="foot">复现：python3 eval/run_eval.py　｜　指标限于自建样例集，非泛化承诺</div>
+    <div class="split2">
+      <table class="t">
+        <tr><th>集合 / 模式</th><th>结果</th></tr>
+        <tr><td>spring-buggy + Guard</td><td class="ok">TP 6/6 · Recall 1.0</td></tr>
+        <tr><td>spring-clean</td><td class="ok">0 findings · 无误报</td></tr>
+        <tr><td>OCR / Hybrid</td><td>可选语义增强；本轮演示以 Guard 为主</td></tr>
+      </table>
+      <div class="sidebox">
+        <h4>如何理解指标</h4>
+        <ul>
+          <li>限于自建样例集，非泛化承诺</li>
+          <li>命中按规则/文本匹配口径</li>
+          <li>复现：python3 eval/run_eval.py</li>
+        </ul>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -309,6 +361,7 @@
           <li>结果难复核、难复现</li>
           <li>Spring 高发点靠临场发挥</li>
           <li>缺少正负例对照</li>
+          <li>开源边界与清单含糊</li>
         </ul>
       </div>
       <div class="new">
@@ -318,7 +371,8 @@
           <li>Spring 确定性规则可重复命中</li>
           <li>证据定位到文件与行号</li>
           <li>金标准 + 干净样例双验证</li>
-          <li>开源边界与清单完整披露</li>
+          <li>上游未改源码，扩展路径清晰</li>
+          <li>清单披露许可与自研边界</li>
         </ul>
       </div>
     </div>
@@ -327,28 +381,70 @@
 
 <section class="slide">
   <div class="head"><div class="sec">07 · 开放成果</div><div class="pg">08 / 10</div></div>
-  <div class="title">评审可直接<em>核验</em></div>
-  <div class="body open">
-    <div class="row"><div class="n">01</div><div><h3>公开仓库</h3><p>代码 · 规则包 · 样例 · 评测 · Web · 文档</p></div></div>
-    <div class="row"><div class="n">02</div><div><h3>一键演示</h3><p><code>python3 scripts/app_server.py</code> → http://127.0.0.1:5193/</p></div></div>
-    <div class="row"><div class="n">03</div><div><h3>资源清单</h3><p>区分上游 / 自研 / 可选模型，权利边界清晰</p></div></div>
-    <p class="repo">github.com/<span>NEX-coding/springguard</span></p>
+  <div class="title">评审可直接<em>核验与复现</em></div>
+  <div class="body">
+    <div class="open">
+      <div class="list">
+        <div class="row"><div class="n">01</div><div><h3>公开仓库</h3><p>代码 · 规则包 · 样例 · 评测 · Web · 文档</p></div></div>
+        <div class="row"><div class="n">02</div><div><h3>一键演示</h3><p><code>python3 scripts/app_server.py</code> → http://127.0.0.1:5193/</p></div></div>
+        <div class="row"><div class="n">03</div><div><h3>资源清单</h3><p>区分上游 / 自研 / 可选模型，权利边界清晰</p></div></div>
+        <div class="row"><div class="n">04</div><div><h3>提交材料</h3><p>技术报告、演示视频、答辩 PPT、佐证材料齐备</p></div></div>
+      </div>
+      <div class="panel">
+        <h4>访问入口</h4>
+        <p>材料以报名系统上传版本为准；仓库便于复核代码与评测脚本。</p>
+        <p>README 含安装、演示与评测步骤。</p>
+        <div class="repo">github.com/<span>NEX-coding/springguard</span></div>
+      </div>
+    </div>
   </div>
 </section>
 
 <section class="slide">
   <div class="head"><div class="sec">08 · 后续计划</div><div class="pg">09 / 10</div></div>
   <div class="title">验证更严，增强<em>更深</em></div>
-  <div class="road">
-    <div><div class="n">01</div><h3>评测加强</h3><p>行级匹配更严、去注释干扰，扩展真实工程负例</p></div>
-    <div><div class="n">02</div><h3>模型对照</h3><p>补全 OCR 对比实验，量化语义审查真实增益</p></div>
-    <div><div class="n">03</div><h3>生态维护</h3><p>更多 Spring 规则、CI 接入；视情况向上游贡献示例</p></div>
+  <div class="body">
+    <div class="road">
+      <div>
+        <div class="n">01</div>
+        <h3>评测加强</h3>
+        <p class="lead">把“能复现”推进到“更可信”</p>
+        <ul>
+          <li>行级匹配更严格</li>
+          <li>过滤注释干扰</li>
+          <li>扩展真实工程负例</li>
+          <li>增加人工抽检记录</li>
+        </ul>
+      </div>
+      <div>
+        <div class="n">02</div>
+        <h3>模型对照</h3>
+        <p class="lead">把可选 AI 路径补成可比较实验</p>
+        <ul>
+          <li>补全 OCR 对比实验</li>
+          <li>量化语义审查增益</li>
+          <li>记录超时 / 漏报案例</li>
+          <li>明确何时启用模型分支</li>
+        </ul>
+      </div>
+      <div>
+        <div class="n">03</div>
+        <h3>生态维护</h3>
+        <p class="lead">从作品演示走向可持续维护</p>
+        <ul>
+          <li>补充更多 Spring 规则</li>
+          <li>CI 接入回归评测</li>
+          <li>完善仓库 LICENSE</li>
+          <li>视情况向上游贡献示例</li>
+        </ul>
+      </div>
+    </div>
   </div>
 </section>
 
 <section class="slide end">
   <div class="eyebrow">Thanks</div>
-  <h1>SpringGuard</h1>
+  <h1>Spring<span>Guard</span></h1>
   <p class="sub">把开源 AI 审查底座，变成可复现的 Spring 工程安全网。</p>
   <p class="repo">github.com/<span>NEX-coding/springguard</span></p>
   <div class="footline"><span>答辩结束 · 欢迎提问</span><span>10 / 10</span></div>
