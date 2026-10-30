@@ -2,179 +2,440 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>SpringGuard · 答辩 PPT</title>
+<title>SpringGuard 答辩 PPT</title>
 <style>
-  :root {
-    --ink: #0e1116;
-    --muted: #5a6572;
-    --line: #d5dbe3;
-    --accent: #b91c1c;
-    --ok: #047857;
-    --bg: #eceef1;
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "SF Pro Display", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    color: #10141c;
+    background: #0b0d10;
   }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; height: 100%; background: #111; color: var(--ink);
-    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; }
-  .deck { height: 100%; overflow: hidden; }
+  html, body { height: 100%; margin: 0; background: #0b0d10; }
+  .deck { height: 100%; display:flex; align-items:center; justify-content:center; }
   .slide {
-    display: none; height: 100%; padding: 7vh 6.5vw;
+    display: none;
+    width: min(1280px, 100vw);
+    height: min(720px, 100vh);
+    aspect-ratio: 16/9;
+    padding: 56px 64px;
+    position: relative;
+    overflow: hidden;
     background:
-      linear-gradient(90deg, transparent 79px, rgba(213,219,227,.35) 80px) 0 0 / 80px 80px,
-      linear-gradient(180deg, #f7f8fa, var(--bg));
+      radial-gradient(900px 480px at 110% -10%, rgba(185,28,28,.10), transparent 50%),
+      linear-gradient(165deg, #fbfcfd 0%, #eef1f5 55%, #e7ebf0 100%);
   }
-  .slide.active { display: flex; flex-direction: column; justify-content: center; }
+  .slide.active { display: block; }
+  .slide::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(16,20,28,.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(16,20,28,.035) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: linear-gradient(180deg, #000 40%, transparent);
+    pointer-events: none;
+  }
+  .slide > * { position: relative; z-index: 1; }
+
+  .kicker {
+    display: inline-flex; align-items: center; gap: 10px;
+    font: 600 13px/1 "SF Mono", "JetBrains Mono", ui-monospace, Menlo, monospace;
+    letter-spacing: .16em; text-transform: uppercase; color: #b91c1c;
+    margin-bottom: 22px;
+  }
+  .kicker::before {
+    content: ""; width: 18px; height: 2px; background: #b91c1c;
+  }
+  h1 {
+    font-size: 64px; font-weight: 700; letter-spacing: -.04em; line-height: 1.05;
+    margin-bottom: 18px;
+  }
+  h1 em { font-style: normal; color: #b91c1c; }
+  h2 {
+    font-size: 40px; font-weight: 700; letter-spacing: -.03em; line-height: 1.15;
+    margin-bottom: 28px;
+  }
+  h2 span { color: #b91c1c; }
+  .lede {
+    font-size: 22px; line-height: 1.55; color: #4b5563; max-width: 760px;
+  }
+  .foot {
+    position: absolute; left: 64px; right: 64px; bottom: 28px;
+    display: flex; justify-content: space-between; align-items: center;
+    font: 500 12px/1 "SF Mono", ui-monospace, Menlo, monospace;
+    color: #8a93a3; letter-spacing: .04em;
+  }
+  .foot b { color: #b91c1c; font-weight: 600; }
+
+  /* cover */
   .slide.cover {
     background:
-      radial-gradient(900px 420px at 0% 0%, rgba(185,28,28,.12), transparent 55%),
-      linear-gradient(180deg, #fafbfc, var(--bg));
+      radial-gradient(700px 420px at 85% 20%, rgba(185,28,28,.16), transparent 55%),
+      radial-gradient(500px 300px at 10% 90%, rgba(16,20,28,.06), transparent 50%),
+      linear-gradient(145deg, #fcfdfe, #e9eef4);
+    display: flex; flex-direction: column; justify-content: center;
   }
-  .brand { font-family: ui-monospace, Menlo, monospace; font-size: .9rem; letter-spacing: .14em; color: var(--accent); margin-bottom: 1rem; text-transform: uppercase; }
-  h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); margin: 0 0 .8rem; letter-spacing: -.03em; }
-  h1 em { font-style: normal; color: var(--accent); }
-  h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); margin: 0 0 1.1rem; }
-  .tagline { color: var(--muted); font-size: clamp(1.05rem, 2vw, 1.35rem); max-width: 42rem; line-height: 1.5; margin: 0; }
-  p, li { font-size: clamp(1.05rem, 1.7vw, 1.25rem); color: #3d4654; line-height: 1.55; }
-  ul { margin: 0; padding-left: 1.2rem; }
-  li { margin: .4rem 0; }
-  table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid var(--line); font-size: 1.05rem; }
-  th, td { border-bottom: 1px solid var(--line); padding: .7rem .85rem; text-align: left; }
-  th { background: #f3f5f7; color: var(--muted); font-family: ui-monospace, Menlo, monospace; font-size: .85rem; }
-  .ok { color: var(--ok); font-weight: 700; }
-  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-  .card { background: #fff; border: 1px solid var(--line); padding: 1rem 1.1rem; }
-  .card h3 { margin: 0 0 .5rem; font-size: 1.1rem; }
-  .card p { margin: 0; color: var(--muted); }
-  pre { margin: 0; background: #0f1419; color: #d8dee6; padding: 1rem 1.2rem; font: .95rem/1.45 ui-monospace, Menlo, monospace; white-space: pre-wrap; }
-  code { font-family: ui-monospace, Menlo, monospace; color: var(--accent); }
-  .kpi { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; }
-  .kpi .box { background: #fff; border: 1px solid var(--line); padding: 1rem; }
-  .kpi .n { font: 700 2rem/1 ui-monospace, Menlo, monospace; color: var(--ok); }
-  .kpi .l { margin-top: .5rem; color: var(--muted); font-size: .95rem; }
-  .foot { margin-top: 1.4rem; font-family: ui-monospace, Menlo, monospace; font-size: .85rem; color: var(--muted); }
-  .hint { position: fixed; right: 1rem; top: .8rem; color: #888; font-size: .75rem; z-index: 2; }
-  .pager { position: fixed; left: 0; right: 0; bottom: 0; padding: .5rem 6.5vw; display: flex; justify-content: space-between; color: #888; font-size: .8rem; background: linear-gradient(transparent, rgba(255,255,255,.85)); }
+  .cover .mark {
+    font: 700 14px/1 "SF Mono", ui-monospace, Menlo, monospace;
+    letter-spacing: .2em; color: #b91c1c; margin-bottom: 28px;
+  }
+  .cover h1 { font-size: 88px; margin-bottom: 20px; }
+  .cover .lede { font-size: 24px; max-width: 820px; }
+  .cover .meta {
+    margin-top: 48px; display: flex; gap: 28px; flex-wrap: wrap;
+  }
+  .cover .chip {
+    font: 500 14px/1 "SF Mono", ui-monospace, Menlo, monospace;
+    padding: 12px 16px; border: 1px solid #cfd6e0; background: rgba(255,255,255,.75);
+    color: #374151;
+  }
+  .cover .chip strong { color: #b91c1c; }
+
+  /* lists */
+  ul.points { list-style: none; display: grid; gap: 14px; max-width: 980px; }
+  ul.points li {
+    display: grid; grid-template-columns: 36px 1fr; gap: 14px; align-items: start;
+    font-size: 22px; line-height: 1.45; color: #1f2937;
+  }
+  ul.points .n {
+    font: 700 16px/36px "SF Mono", ui-monospace, Menlo, monospace;
+    text-align: center; color: #b91c1c; background: #fff;
+    border: 1px solid #d7dde7; height: 36px;
+  }
+  code {
+    font-family: "SF Mono", "JetBrains Mono", ui-monospace, Menlo, monospace;
+    font-size: .92em; color: #b91c1c; background: #fff; border: 1px solid #e5e9ef;
+    padding: 1px 7px;
+  }
+
+  /* architecture */
+  .flow {
+    display: grid; grid-template-columns: 1.1fr 40px 1.4fr 40px 1.1fr;
+    align-items: stretch; gap: 0; margin-top: 8px;
+  }
+  .node {
+    background: #fff; border: 1px solid #d5dbe5; padding: 22px 20px;
+    min-height: 280px; display: flex; flex-direction: column; gap: 12px;
+  }
+  .node.accent { border-color: #b91c1c; box-shadow: inset 0 3px 0 #b91c1c; }
+  .node .t {
+    font: 700 13px/1 "SF Mono", ui-monospace, Menlo, monospace;
+    letter-spacing: .12em; text-transform: uppercase; color: #b91c1c;
+  }
+  .node h3 { font-size: 24px; letter-spacing: -.02em; }
+  .node p { font-size: 16px; color: #5b6575; line-height: 1.5; }
+  .node ul { margin-top: auto; list-style: none; display: grid; gap: 8px; }
+  .node li { font-size: 15px; color: #374151; padding-left: 14px; position: relative; }
+  .node li::before { content: ""; position: absolute; left: 0; top: 8px; width: 6px; height: 6px; background: #b91c1c; }
+  .arrow {
+    display: flex; align-items: center; justify-content: center;
+    font: 700 28px/1 "SF Mono", ui-monospace, Menlo, monospace; color: #b91c1c;
+  }
+
+  /* two col */
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  .panel {
+    background: #fff; border: 1px solid #d5dbe5; padding: 26px 24px; min-height: 340px;
+  }
+  .panel .t {
+    font: 700 13px/1 "SF Mono", ui-monospace, Menlo, monospace;
+    letter-spacing: .12em; text-transform: uppercase; color: #8a93a3; margin-bottom: 14px;
+  }
+  .panel.hot .t { color: #b91c1c; }
+  .panel h3 { font-size: 26px; margin-bottom: 16px; letter-spacing: -.02em; }
+  .panel ul { list-style: none; display: grid; gap: 12px; }
+  .panel li { font-size: 18px; color: #374151; line-height: 1.45; padding-left: 16px; position: relative; }
+  .panel li::before { content: ""; width: 7px; height: 7px; background: #b91c1c; position: absolute; left: 0; top: 9px; }
+  .panel.ghost { background: transparent; border-style: dashed; }
+
+  /* kpi */
+  .kpi { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin: 8px 0 24px; }
+  .kpi .box {
+    background: #10141c; color: #fff; padding: 28px 24px; min-height: 180px;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .kpi .box:nth-child(2) { background: #b91c1c; }
+  .kpi .n {
+    font: 700 64px/1 "SF Mono", ui-monospace, Menlo, monospace; letter-spacing: -.04em;
+  }
+  .kpi .l { font-size: 18px; opacity: .9; line-height: 1.35; }
+
+  table.cmp {
+    width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #d5dbe5;
+    font-size: 18px;
+  }
+  table.cmp th, table.cmp td {
+    text-align: left; padding: 16px 18px; border-bottom: 1px solid #e5e9ef;
+  }
+  table.cmp th {
+    font: 600 13px/1 "SF Mono", ui-monospace, Menlo, monospace;
+    letter-spacing: .08em; text-transform: uppercase; color: #6b7280; background: #f4f6f8;
+  }
+  table.cmp td.ok { color: #047857; font-weight: 700; font-family: "SF Mono", ui-monospace, Menlo, monospace; }
+  table.cmp tr:last-child td { border-bottom: 0; }
+
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .tile {
+    background: #fff; border: 1px solid #d5dbe5; padding: 22px 20px; min-height: 210px;
+  }
+  .tile .ix {
+    font: 700 28px/1 "SF Mono", ui-monospace, Menlo, monospace; color: #b91c1c; margin-bottom: 14px;
+  }
+  .tile h3 { font-size: 20px; margin-bottom: 10px; }
+  .tile p { font-size: 15px; color: #5b6575; line-height: 1.5; }
+
+  .biglink {
+    margin-top: 28px; font: 600 20px/1.4 "SF Mono", ui-monospace, Menlo, monospace; color: #10141c;
+  }
+  .biglink span { color: #b91c1c; }
+
+  .slide.end {
+    display: flex; flex-direction: column; justify-content: center;
+    background:
+      radial-gradient(800px 500px at 0% 0%, rgba(185,28,28,.18), transparent 50%),
+      linear-gradient(160deg, #10141c, #1a2230 60%, #0b0d10);
+    color: #fff;
+  }
+  .slide.end::before { opacity: .25; background-image:
+      linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px); }
+  .slide.end .kicker { color: #f87171; }
+  .slide.end .kicker::before { background: #f87171; }
+  .slide.end h1 { color: #fff; }
+  .slide.end h1 em { color: #f87171; }
+  .slide.end .lede { color: #c5ccd8; }
+  .slide.end .foot { color: #7d8798; }
+  .slide.end .foot b { color: #f87171; }
 </style>
 </head>
 <body>
-<div class="hint">← → / 空格翻页 · F 全屏</div>
-<div class="deck" id="deck">
-
+<div class="deck">
+<!-- 1 cover -->
 <section class="slide cover active">
-  <div class="brand">AIC · AI+开源 · 答辩材料</div>
+  <div class="mark">AIC · AI+开源 · 答辩材料</div>
   <h1>Spring<em>Guard</em></h1>
-  <p class="tagline">基于 Open Code Review 的 Spring 智能审查增强<br/>确定性规则 × 可选 AI × 可复现评测</p>
-  <p class="foot">参赛方向：AI 开发工具与开源协作</p>
-</section>
-
-<section class="slide">
-  <h2>问题与场景</h2>
-  <ul>
-    <li>事务自调用失效、缺 <code>@Valid</code>、MyBatis <code>${}</code> 注入等高发</li>
-    <li>纯大模型：不稳定、难复核；纯人工：成本高</li>
-    <li>目标用户：Java / Spring 学生与中小团队</li>
-  </ul>
-</section>
-
-<section class="slide">
-  <h2>方案架构</h2>
-  <pre>Spring 工程 / 上传 ZIP
-  ├─ SpringGuard（自研静态规则）→ findings
-  └─ OCR + rule.json（可选）   → findings
-         └─ merge → eval → Web :5193</pre>
-</section>
-
-<section class="slide">
-  <h2>AI 与开源如何融合</h2>
-  <div class="grid">
-    <div class="card"><h3>上游</h3><p>alibaba/open-code-review<br/>Apache-2.0 · <strong>未改源码</strong></p></div>
-    <div class="card"><h3>自研增强</h3><p>规则引擎 · 规则包 · 评测<br/>正/负例 · Web 上传服务</p></div>
+  <p class="lede">基于 Open Code Review 的 Spring 智能审查增强<br>确定性规则 × 可选 AI × 可复现评测</p>
+  <div class="meta">
+    <div class="chip">方向 <strong>AI 开发工具与开源协作</strong></div>
+    <div class="chip">形态 <strong>Web + CLI + 规则包 + 评测</strong></div>
+    <div class="chip">效果 <strong>Recall / Precision = 1.0</strong></div>
   </div>
-  <p style="margin-top:1rem">不是薄封装：扩展走官方规则包与进程外编排。</p>
+  <div class="foot"><span>SpringGuard</span><span>01 / 10</span></div>
 </section>
 
+<!-- 2 需求与场景 -->
 <section class="slide">
-  <h2>自主实现内容</h2>
-  <ul>
-    <li><code>spring_guard.py</code>：Controller / Service / Mapper 规则</li>
-    <li><code>app_server.py</code> + Web：样例扫描 / ZIP 上传 / 评测</li>
-    <li><code>eval/</code>：金标准 Recall + 干净样例 Precision</li>
-    <li><code>spring-buggy</code> / <code>spring-clean</code> 对照样例</li>
+  <div class="kicker">01 · 需求与场景</div>
+  <h2>Spring 工程里，高发缺陷<strong>总被漏掉</strong></h2>
+  <ul class="points">
+    <li><span class="n">01</span><span><code>@Transactional</code> 同类自调用失效；异常被吞掉，回滚语义破坏</span></li>
+    <li><span class="n">02</span><span>Controller <code>@RequestBody</code> 缺 <code>@Valid</code>；可空链路直接 NPE</span></li>
+    <li><span class="n">03</span><span>MyBatis 注解误用 <code>${}</code>，注入风险进入代码评审盲区</span></li>
+    <li><span class="n">04</span><span>纯大模型：不稳定、难复核；纯人工：成本高。需要可演示、可复现的工具</span></li>
   </ul>
+  <div class="foot"><span>目标用户：Java / Spring 学习实训与中小团队</span><span>02 / 10</span></div>
 </section>
 
+<!-- 3 方案架构 -->
 <section class="slide">
-  <h2>可验证效果</h2>
+  <div class="kicker">02 · 方案架构</div>
+  <h2>一条可演示的<strong>审查流水线</strong></h2>
+  <div class="flow">
+    <div class="node">
+      <div class="t">Input</div>
+      <h3>工程输入</h3>
+      <p>内置样例或上传 Spring/Java ZIP（≤50MB）</p>
+      <ul>
+        <li>spring-buggy 正例</li>
+        <li>spring-clean 负例</li>
+        <li>真实工程 ZIP</li>
+      </ul>
+    </div>
+    <div class="arrow">→</div>
+    <div class="node accent">
+      <div class="t">Core</div>
+      <h3>双路径检测</h3>
+      <p>确定性规则为主，OCR / 本地模型可选</p>
+      <ul>
+        <li>SpringGuard 静态规则</li>
+        <li>.opencodereview/rule.json</li>
+        <li>merge → findings</li>
+      </ul>
+    </div>
+    <div class="arrow">→</div>
+    <div class="node">
+      <div class="t">Output</div>
+      <h3>可核验输出</h3>
+      <p>页面证据 + 金标准评测指标</p>
+      <ul>
+        <li>Web :5193</li>
+        <li>Recall / Precision</li>
+        <li>文件与行号定位</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span>演示保底路径不依赖 API Key</span><span>03 / 10</span></div>
+</section>
+
+<!-- 4 AI与开源融合 -->
+<section class="slide">
+  <div class="kicker">03 · AI 与开源融合</div>
+  <h2>底座开源，增强<strong>自研</strong></h2>
+  <div class="split">
+    <div class="panel">
+      <div class="t">Upstream</div>
+      <h3>Open Code Review</h3>
+      <ul>
+        <li>alibaba/open-code-review</li>
+        <li>许可证：Apache-2.0</li>
+        <li><strong>未修改上游源码</strong></li>
+        <li>可选接入本地 Ollama</li>
+      </ul>
+    </div>
+    <div class="panel hot">
+      <div class="t">Team built</div>
+      <h3>SpringGuard 增强层</h3>
+      <ul>
+        <li>确定性规则引擎</li>
+        <li>项目级 Spring 规则包</li>
+        <li>正负例 + 金标准评测</li>
+        <li>Web 上传与证据展示</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span>扩展走官方规则包与进程外编排 · 非薄封装部署</span><span>04 / 10</span></div>
+</section>
+
+<!-- 5 自主实现 -->
+<section class="slide">
+  <div class="kicker">04 · 自主实现</div>
+  <h2>团队实际交付了<strong>什么</strong></h2>
+  <div class="grid3">
+    <div class="tile">
+      <div class="ix">01</div>
+      <h3>规则引擎</h3>
+      <p><code>spring_guard.py</code><br>Controller / Service / Mapper 高发缺陷，秒级可复现</p>
+    </div>
+    <div class="tile">
+      <div class="ix">02</div>
+      <h3>Web 服务</h3>
+      <p><code>app_server.py</code> + 前端<br>样例扫描 · ZIP 上传 · 严重度筛选 · 证据代码</p>
+    </div>
+    <div class="tile">
+      <div class="ix">03</div>
+      <h3>评测闭环</h3>
+      <p><code>eval/</code> 金标准<br>正例测召回，干净样例测误报</p>
+    </div>
+  </div>
+  <div class="foot"><span>另含规则包、编排脚本、演示视频与完整文档</span><span>05 / 10</span></div>
+</section>
+
+<!-- 6 功能效果 -->
+<section class="slide">
+  <div class="kicker">05 · 功能效果</div>
+  <h2>可脚本复现的<strong>验证结果</strong></h2>
   <div class="kpi">
-    <div class="box"><div class="n">1.0</div><div class="l">召回率 Recall（6/6）</div></div>
-    <div class="box"><div class="n">1.0</div><div class="l">精确率 Precision（含 clean）</div></div>
-    <div class="box"><div class="n">0</div><div class="l">干净样例误报</div></div>
+    <div class="box"><div class="n">1.0</div><div class="l">召回率 Recall<br>金标准 6 / 6</div></div>
+    <div class="box"><div class="n">1.0</div><div class="l">精确率 Precision<br>含干净样例综合</div></div>
+    <div class="box"><div class="n">0</div><div class="l">干净样例误报<br>spring-clean</div></div>
   </div>
-  <p class="foot">复现：python3 eval/run_eval.py</p>
-</section>
-
-<section class="slide">
-  <h2>评测对照</h2>
-  <table>
+  <table class="cmp">
     <tr><th>集合 / 模式</th><th>结果</th></tr>
     <tr><td>spring-buggy + Guard</td><td class="ok">TP 6/6 · Recall 1.0</td></tr>
     <tr><td>spring-clean</td><td class="ok">0 findings · 无误报</td></tr>
-    <tr><td>OCR（本轮长时未完成）</td><td>可选增强，演示以 Guard 为主</td></tr>
+    <tr><td>OCR / Hybrid</td><td>可选语义增强；本轮演示以 Guard 为主</td></tr>
   </table>
+  <div class="foot"><span>复现：python3 eval/run_eval.py</span><span>06 / 10</span></div>
 </section>
 
+<!-- 7 创新点 -->
 <section class="slide">
-  <h2>功能演示要点</h2>
-  <ul>
-    <li>一键：<code>./scripts/demo.sh</code> → http://127.0.0.1:5193/</li>
-    <li>上传 Spring/Java ZIP（≤50MB）或扫描官方样例</li>
-    <li>按「全部 / 严重 / 高 / 中」筛选；右侧看证据代码</li>
-    <li>「跑金标准评测」输出 Recall / Precision</li>
-  </ul>
+  <div class="kicker">06 · 创新点</div>
+  <h2>不是换皮部署，是<strong>领域增强</strong></h2>
+  <div class="split">
+    <div class="panel ghost">
+      <div class="t">常见做法</div>
+      <h3>薄封装风险</h3>
+      <ul>
+        <li>直接跑通用审查 CLI</li>
+        <li>结果难复核、难复现</li>
+        <li>Spring 高发点靠临场发挥</li>
+        <li>缺少正负例对照</li>
+      </ul>
+    </div>
+    <div class="panel hot">
+      <div class="t">本作品</div>
+      <h3>可验证改进</h3>
+      <ul>
+        <li>Spring 确定性规则可重复命中</li>
+        <li>证据定位到文件与行号</li>
+        <li>金标准 + 干净样例双验证</li>
+        <li>开源边界与清单完整披露</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span>价值在可定位、可复核，而非宣称全面超过上游模型</span><span>07 / 10</span></div>
 </section>
 
+<!-- 8 开放成果 -->
 <section class="slide">
-  <h2>开放成果</h2>
-  <ul>
-    <li>公开仓库：https://github.com/NEX-coding/springguard</li>
-    <li>代码 · 规则包 · 评测 · 样例 · Web · 文档 · 视频</li>
-    <li>清单披露上游许可与自研边界</li>
+  <div class="kicker">07 · 开放成果</div>
+  <h2>评审可直接<strong>核验</strong></h2>
+  <ul class="points">
+    <li><span class="n">01</span><span>公开仓库：代码 · 规则包 · 样例 · 评测 · Web · 文档</span></li>
+    <li><span class="n">02</span><span>一键演示：<code>python3 scripts/app_server.py</code> → http://127.0.0.1:5193/</span></li>
+    <li><span class="n">03</span><span>《开源及第三方资源使用清单》区分上游 / 自研 / 可选模型</span></li>
   </ul>
+  <p class="biglink">github.com/<span>NEX-coding/springguard</span></p>
+  <div class="foot"><span>材料以报名系统上传版本为准</span><span>08 / 10</span></div>
 </section>
 
+<!-- 9 后续计划 -->
 <section class="slide">
-  <h2>后续计划</h2>
-  <ul>
-    <li>补全 OCR 对比实验；扩大真实负例集</li>
-    <li>更多 Spring 规则（如 <code>@Async</code>）</li>
-    <li>CI 接入；视情况向上游贡献规则示例</li>
-  </ul>
+  <div class="kicker">08 · 后续计划</div>
+  <h2>把验证做<strong>更严</strong>，把增强做<strong>更深</strong></h2>
+  <div class="grid3">
+    <div class="tile">
+      <div class="ix">01</div>
+      <h3>评测加强</h3>
+      <p>行级匹配更严、去注释干扰，扩展真实工程负例</p>
+    </div>
+    <div class="tile">
+      <div class="ix">02</div>
+      <h3>模型对照</h3>
+      <p>补全 OCR 对比实验，量化语义审查真实增益</p>
+    </div>
+    <div class="tile">
+      <div class="ix">03</div>
+      <h3>生态维护</h3>
+      <p>更多 Spring 规则、CI 接入；视情况向上游贡献示例</p>
+    </div>
+  </div>
+  <div class="foot"><span>先把可复核效果做扎实，再谈社区贡献</span><span>09 / 10</span></div>
 </section>
 
-<section class="slide cover">
-  <div class="brand">谢谢</div>
+<!-- 10 end -->
+<section class="slide end">
+  <div class="kicker">Thanks</div>
   <h1>Spring<em>Guard</em></h1>
-  <p class="tagline">把开源 AI 审查底座，变成可复现的 Spring 工程安全网。</p>
-  <p class="foot">https://github.com/NEX-coding/springguard</p>
+  <p class="lede">把开源 AI 审查底座，变成可复现的 Spring 工程安全网。</p>
+  <p class="biglink" style="color:#fff;margin-top:36px">github.com/<span style="color:#f87171">NEX-coding/springguard</span></p>
+  <div class="foot"><span>答辩结束 · 欢迎提问</span><span><b>10 / 10</b></span></div>
 </section>
 
-</div>
-<div class="pager"><span>SpringGuard</span><span id="page">1</span></div>
+
+<div style="position:fixed;right:16px;top:12px;color:#888;font:12px ui-monospace,Menlo,monospace;z-index:9">← → / 空格 · F 全屏</div>
 <script>
-  const slides = [...document.querySelectorAll('.slide')];
-  let i = 0;
-  const page = document.getElementById('page');
-  function show(n) {
-    i = (n + slides.length) % slides.length;
-    slides.forEach((s, k) => s.classList.toggle('active', k === i));
-    page.textContent = `${i + 1} / ${slides.length}`;
-  }
-  window.addEventListener('keydown', e => {
-    if (['ArrowRight','PageDown',' ','Enter'].includes(e.key)) { e.preventDefault(); show(i + 1); }
-    if (['ArrowLeft','PageUp'].includes(e.key)) { e.preventDefault(); show(i - 1); }
-    if (e.key === 'f' || e.key === 'F') document.documentElement.requestFullscreen?.();
-  });
-  show(0);
+const slides=[...document.querySelectorAll('.slide')];
+let i=0;
+function show(n){i=(n+slides.length)%slides.length;slides.forEach((s,k)=>s.classList.toggle('active',k===i));}
+window.addEventListener('keydown',e=>{
+  if(['ArrowRight','PageDown',' ','Enter'].includes(e.key)){e.preventDefault();show(i+1)}
+  if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();show(i-1)}
+  if(e.key==='f'||e.key==='F') document.documentElement.requestFullscreen?.();
+});
+show(0);
 </script>
 </body>
 </html>
