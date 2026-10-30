@@ -26,6 +26,12 @@
       linear-gradient(165deg, #fbfcfd 0%, #eef1f5 55%, #e7ebf0 100%);
   }
   .slide.active { display: block; }
+  .slide.cover.active,
+  .slide.end.active {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
   .slide::before {
     content: "";
     position: absolute; inset: 0;
@@ -74,7 +80,6 @@
       radial-gradient(700px 420px at 85% 20%, rgba(185,28,28,.16), transparent 55%),
       radial-gradient(500px 300px at 10% 90%, rgba(16,20,28,.06), transparent 50%),
       linear-gradient(145deg, #fcfdfe, #e9eef4);
-    display: flex; flex-direction: column; justify-content: center;
   }
   .cover .mark {
     font: 700 14px/1 "SF Mono", ui-monospace, Menlo, monospace;
@@ -191,7 +196,6 @@
   .biglink span { color: #b91c1c; }
 
   .slide.end {
-    display: flex; flex-direction: column; justify-content: center;
     background:
       radial-gradient(800px 500px at 0% 0%, rgba(185,28,28,.18), transparent 50%),
       linear-gradient(160deg, #10141c, #1a2230 60%, #0b0d10);
@@ -219,7 +223,7 @@
   <div class="meta">
     <div class="chip">方向 <strong>AI 开发工具与开源协作</strong></div>
     <div class="chip">形态 <strong>Web + CLI + 规则包 + 评测</strong></div>
-    <div class="chip">效果 <strong>Recall / Precision = 1.0</strong></div>
+    <div class="chip">效果 <strong>自建金标准 6/6 · 干净样例 0 误报</strong></div>
   </div>
   <div class="foot"><span>SpringGuard</span><span>01 / 10</span></div>
 </section>
@@ -336,8 +340,8 @@
   <div class="kicker">05 · 功能效果</div>
   <h2>可脚本复现的<strong>验证结果</strong></h2>
   <div class="kpi">
-    <div class="box"><div class="n">1.0</div><div class="l">召回率 Recall<br>金标准 6 / 6</div></div>
-    <div class="box"><div class="n">1.0</div><div class="l">精确率 Precision<br>含干净样例综合</div></div>
+    <div class="box"><div class="n">1.0</div><div class="l">召回率 Recall<br>自建金标准 6 / 6</div></div>
+    <div class="box"><div class="n">1.0</div><div class="l">精确率 Precision<br>脚本口径 · 含 clean</div></div>
     <div class="box"><div class="n">0</div><div class="l">干净样例误报<br>spring-clean</div></div>
   </div>
   <table class="cmp">
